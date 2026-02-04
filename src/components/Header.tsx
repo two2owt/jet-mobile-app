@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import { Input } from "./ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -8,8 +8,8 @@ import type { Database } from "@/integrations/supabase/types";
 import { supabase } from "@/integrations/supabase/client";
 import { useSearchHistory } from "@/hooks/useSearchHistory";
 
-// Lazy load search results - only needed when user searches
-const SearchResults = lazy(() => import("./SearchResults").then(m => ({ default: m.SearchResults })));
+// Direct import - SearchResults is a lightweight component
+import { SearchResults } from "./SearchResults";
 
 type Deal = Database['public']['Tables']['deals']['Row'];
 
@@ -162,17 +162,15 @@ export const Header = ({
               className="w-full pl-7 sm:pl-8 md:pl-9 pr-2 sm:pr-3 h-8 sm:h-9 md:h-10 rounded-full bg-secondary/50 border-border/50 focus:bg-secondary focus:border-primary/50 transition-colors text-xs sm:text-sm md:text-base text-foreground placeholder:text-muted-foreground" 
             />
             
-            {/* Lazy-loaded search results - only loads when user searches */}
-            <Suspense fallback={null}>
-              <SearchResults 
-                query={searchQuery} 
-                venues={venues} 
-                deals={deals} 
-                onVenueSelect={onVenueSelect} 
-                onClose={handleCloseResults} 
-                isVisible={showResults} 
-              />
-            </Suspense>
+            {/* Search results - renders when query exists */}
+            <SearchResults 
+              query={searchQuery} 
+              venues={venues} 
+              deals={deals} 
+              onVenueSelect={onVenueSelect} 
+              onClose={handleCloseResults} 
+              isVisible={showResults} 
+            />
           </div>
 
           {/* Spacer - Takes remaining width between search and avatar */}
