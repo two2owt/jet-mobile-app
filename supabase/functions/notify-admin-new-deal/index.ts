@@ -1,5 +1,8 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@4.0.0";
+import { logVersion, EDGE_FUNCTION_VERSION } from "../_shared/cors.ts";
+
+const FUNCTION_NAME = "notify-admin-new-deal";
+logVersion(FUNCTION_NAME);
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 const hookSecret = Deno.env.get("NOTIFY_ADMIN_HOOK_SECRET");
@@ -17,7 +20,7 @@ function escapeHtml(text: string): string {
   return text.replace(/[&<>"']/g, (char) => htmlEntities[char] || char);
 }
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   if (req.method !== 'POST') {
     return new Response('Method not allowed', { status: 405 });
   }

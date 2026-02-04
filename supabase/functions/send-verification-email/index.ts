@@ -3,14 +3,13 @@ import { Webhook } from 'https://esm.sh/standardwebhooks@1.0.0';
 import { Resend } from 'https://esm.sh/resend@4.0.0';
 import { renderAsync } from 'https://esm.sh/@react-email/components@0.0.22';
 import { VerificationEmail } from './_templates/verification-email.tsx';
+import { corsHeaders, logVersion, EDGE_FUNCTION_VERSION } from "../_shared/cors.ts";
+
+const FUNCTION_NAME = "send-verification-email";
+logVersion(FUNCTION_NAME);
 
 const resend = new Resend(Deno.env.get('RESEND_API_KEY') as string);
 const hookSecret = Deno.env.get('SEND_EMAIL_HOOK_SECRET') as string;
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
 
 Deno.serve(async (req) => {
   // Handle CORS preflight requests

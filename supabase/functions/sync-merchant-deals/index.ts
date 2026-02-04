@@ -1,11 +1,9 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { corsHeaders, logVersion, EDGE_FUNCTION_VERSION } from "../_shared/cors.ts";
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-webhook-secret',
-};
+const FUNCTION_NAME = "sync-merchant-deals";
+logVersion(FUNCTION_NAME);
 
 // Valid deal_type values in the consumer app database
 const VALID_DEAL_TYPES = ['event', 'special', 'offer'] as const;
@@ -67,7 +65,7 @@ function mapDealType(incomingType: string): ValidDealType {
 type MerchantDeal = z.infer<typeof MerchantDealSchema>;
 type WebhookPayload = z.infer<typeof WebhookPayloadSchema>;
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
