@@ -25,11 +25,12 @@ import { useBottomNavigation, type NavTab } from "@/hooks/useBottomNavigation";
 // Direct import for MapboxHeatmap
 import { MapboxHeatmap } from "@/components/MapboxHeatmap";
 
-// Lazy load all secondary components - breaks up critical request chain
-const UserProfile = lazy(() => import("@/components/UserProfile").then(m => ({ default: m.UserProfile })));
+// Direct imports for visible content - no lazy loading needed
+import { JetCard } from "@/components/JetCard";
+import { NotificationCard } from "@/components/NotificationCard";
+
+// Lazy load tab content and dialogs - user-triggered
 const ExploreTab = lazy(() => import("@/components/ExploreTab").then(m => ({ default: m.ExploreTab })));
-const JetCard = lazy(() => import("@/components/JetCard").then(m => ({ default: m.JetCard })));
-const NotificationCard = lazy(() => import("@/components/NotificationCard").then(m => ({ default: m.NotificationCard })));
 const DirectionsDialog = lazy(() => import("@/components/DirectionsDialog"));
 
 // Lazy load non-critical UI - deferred until after FCP
@@ -393,13 +394,11 @@ const Index = () => {
                     <div className="w-10 h-1 bg-muted-foreground/40 rounded-full" />
                   </div>
                 )}
-                <Suspense fallback={null}>
-                  <JetCard 
-                    venue={selectedVenue} 
-                    onGetDirections={handleGetDirections}
-                    onClose={() => setSelectedVenue(null)}
-                  />
-                </Suspense>
+                <JetCard 
+                  venue={selectedVenue} 
+                  onGetDirections={handleGetDirections}
+                  onClose={() => setSelectedVenue(null)}
+                />
               </div>
             </div>
           )}
@@ -457,7 +456,7 @@ const Index = () => {
                   <p className="text-xs sm:text-sm mt-1 sm:mt-2">Enable location tracking to receive deal alerts</p>
                 </div>
               ) : (
-                <Suspense fallback={null}>
+                <>
                   {notifications.map((notification) => (
                     <div key={notification.id}>
                       <NotificationCard 
@@ -467,7 +466,7 @@ const Index = () => {
                       />
                     </div>
                   ))}
-                </Suspense>
+                </>
               )}
             </div>
           )}
