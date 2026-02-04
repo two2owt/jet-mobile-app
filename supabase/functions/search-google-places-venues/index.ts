@@ -1,9 +1,7 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { corsHeaders, logVersion, EDGE_FUNCTION_VERSION } from "../_shared/cors.ts";
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+const FUNCTION_NAME = "search-google-places-venues";
+logVersion(FUNCTION_NAME);
 
 // Top 10 most popular venues in Charlotte, NC with verified Google Places addresses
 const CHARLOTTE_TOP_VENUES = [
@@ -119,7 +117,7 @@ const CHARLOTTE_TOP_VENUES = [
   },
 ];
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
