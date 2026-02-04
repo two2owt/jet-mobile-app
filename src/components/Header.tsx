@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Search } from "lucide-react";
+import { Search, Sparkles } from "lucide-react";
 import { Input } from "./ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useNavigate } from "react-router-dom";
@@ -7,16 +7,14 @@ import type { Venue } from "./MapboxHeatmap";
 import type { Database } from "@/integrations/supabase/types";
 import { supabase } from "@/integrations/supabase/client";
 import { useSearchHistory } from "@/hooks/useSearchHistory";
-
-// Direct import - SearchResults is a lightweight component
 import { SearchResults } from "./SearchResults";
 
 type Deal = Database['public']['Tables']['deals']['Row'];
 
-// Simple validation without zod - avoids loading 13KB library
 const validateSearchQuery = (value: string): boolean => {
   return typeof value === 'string' && value.length <= 100;
 };
+
 interface HeaderProps {
   venues: Venue[];
   deals: Deal[];
@@ -26,6 +24,7 @@ interface HeaderProps {
   onRefresh?: () => void;
   cityName?: string;
 }
+
 export const Header = ({
   venues,
   deals,
@@ -41,22 +40,19 @@ export const Header = ({
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [displayName, setDisplayName] = useState<string>("JT");
   const [userId, setUserId] = useState<string | undefined>(undefined);
-  const {
-    addToSearchHistory
-  } = useSearchHistory(userId);
+  const { addToSearchHistory } = useSearchHistory(userId);
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const {
-          data: {
-            user
-          }
-        } = await supabase.auth.getUser();
+        const { data: { user } } = await supabase.auth.getUser();
         if (user) {
           setUserId(user.id);
-          const {
-            data: profile
-          } = await supabase.from('profiles').select('avatar_url, display_name').eq('id', user.id).single();
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('avatar_url, display_name')
+            .eq('id', user.id)
+            .single();
           if (profile) {
             setAvatarUrl(profile.avatar_url);
             setDisplayName(profile.display_name || user.email?.substring(0, 2).toUpperCase() || "JT");
@@ -68,18 +64,14 @@ export const Header = ({
     };
     fetchProfile();
   }, []);
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-
-    // Simple validation without zod - avoids loading 13KB library
-    if (!validateSearchQuery(value)) {
-      return; // Reject invalid input
-    }
+    if (!validateSearchQuery(value)) return;
     
     setSearchQuery(value);
     setShowResults(value.trim().length > 0);
 
-    // Track search after a short delay (debounced)
     if (value.trim().length > 2) {
       const timeoutId = setTimeout(() => {
         addToSearchHistory(value.trim());
@@ -87,53 +79,60 @@ export const Header = ({
       return () => clearTimeout(timeoutId);
     }
   };
+
   const handleCloseResults = () => {
     setShowResults(false);
   };
+
   return (
     <header 
-      className="bg-card/90 backdrop-blur-xl border-b border-border/30 sticky top-0 z-[60] header-contained text-foreground shadow-sm" 
+      className="sticky top-0 z-[60] text-foreground"
       role="banner" 
       style={{
         paddingTop: 'var(--safe-area-inset-top)',
-        // FIXED dimensions using CSS variables - must match shell-header exactly
         height: 'var(--header-total-height)',
         minHeight: 'var(--header-total-height)',
         maxHeight: 'var(--header-total-height)',
-        // CRITICAL: Prevent flex container from shrinking this element
         flexShrink: 0,
-        // Containment prevents CLS - use 'layout paint' to allow color inheritance
         contain: 'layout paint',
-        transform: 'translateZ(0)',
         overflow: 'hidden',
-        // Explicit positioning to prevent layout recalculation
-        position: 'sticky',
-        top: 0,
-        // Ensure color inheritance works for SVG currentColor
         color: 'inherit',
       }}
     >
-      {/* Use fluid spacing that adapts to device size */}
-      <div className="max-w-7xl mx-auto px-fluid-sm sm:px-fluid-md md:px-fluid-lg h-full flex items-center">
-        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 w-full">
-          {/* Logo - LCP element with elementtiming for performance tracking */}
-          {/* FIXED dimensions to prevent CLS - must match skeleton */}
+      {/* Glassmorphic background layer */}
+      <div 
+        className="absolute inset-0 bg-card/85 backdrop-blur-2xl"
+        style={{ zIndex: -1 }}
+      />
+      
+      {/* Subtle gradient overlay for depth */}
+      <div 
+        className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5"
+        style={{ zIndex: -1 }}
+      />
+      
+      {/* Bottom border with gradient */}
+      <div 
+        className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border/60 to-transparent"
+      />
+
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 h-full flex items-center">
+        <div className="flex items-center gap-3 sm:gap-4 md:gap-5 w-full">
+          
+          {/* Logo with enhanced styling */}
           <a 
             href="/" 
-            className="flex items-center flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-md"
-            style={{
-              // Fixed dimensions to prevent layout shift
-              minWidth: '36px',
-              height: '24px',
-            }}
+            className="group flex items-center gap-1.5 flex-shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg px-1 -ml-1"
+            style={{ minWidth: '48px', height: '32px' }}
             onClick={e => {
               e.preventDefault();
               navigate('/');
             }} 
             aria-label="JET - Go to home"
           >
+            <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-primary opacity-80 group-hover:opacity-100 transition-opacity" />
             <h1 
-              className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black text-foreground tracking-wider leading-none"
+              className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight bg-gradient-to-r from-foreground via-foreground to-primary bg-clip-text leading-none group-hover:from-primary group-hover:to-accent transition-all duration-300"
               // @ts-expect-error - elementtiming is a valid HTML attribute for LCP tracking
               elementtiming="lcp-brand"
             >
@@ -141,28 +140,25 @@ export const Header = ({
             </h1>
           </a>
           
-          {/* Search Bar - FIXED width with responsive scaling */}
+          {/* Enhanced search bar */}
           <div 
-            className="relative flex-shrink-0"
-            style={{
-              // Fixed widths per breakpoint to prevent CLS
-              width: 'clamp(100px, 20vw, 280px)',
-              minWidth: '100px',
-            }}
+            className="relative flex-1 max-w-xs sm:max-w-sm"
+            style={{ minWidth: '120px' }}
           >
-            <Search className="absolute left-2 sm:left-2.5 md:left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-4.5 md:h-4.5 text-muted-foreground pointer-events-none z-10" />
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
+              <Search className="w-4 h-4 text-muted-foreground/70" />
+            </div>
             <Input 
               type="text" 
-              placeholder="Search..." 
+              placeholder="Search venues..." 
               value={searchQuery} 
               onChange={handleSearchChange} 
               onFocus={() => searchQuery.trim() && setShowResults(true)} 
               maxLength={100} 
               aria-label="Search venues and deals" 
-              className="w-full pl-7 sm:pl-8 md:pl-9 pr-2 sm:pr-3 h-8 sm:h-9 md:h-10 rounded-full bg-secondary/50 border-border/50 focus:bg-secondary focus:border-primary/50 transition-colors text-xs sm:text-sm md:text-base text-foreground placeholder:text-muted-foreground" 
+              className="w-full pl-9 pr-3 h-9 sm:h-10 rounded-xl bg-secondary/40 border-border/40 hover:bg-secondary/60 focus:bg-secondary/80 focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-all duration-200 text-sm placeholder:text-muted-foreground/60" 
             />
             
-            {/* Search results - renders when query exists */}
             <SearchResults 
               query={searchQuery} 
               venues={venues} 
@@ -173,31 +169,26 @@ export const Header = ({
             />
           </div>
 
-          {/* Spacer - Takes remaining width between search and avatar */}
+          {/* Spacer */}
           <div className="flex-1 min-w-0" />
 
-          {/* Avatar - FIXED dimensions, renders immediately with fallback */}
-          <div 
-            className="flex-shrink-0"
-            style={{
-              // Fixed dimensions to prevent CLS
-              width: 'clamp(32px, 8vw, 44px)',
-              height: 'clamp(32px, 8vw, 44px)',
-            }}
+          {/* Enhanced avatar */}
+          <button 
+            onClick={() => navigate('/settings')} 
+            className="relative flex-shrink-0 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-full"
+            style={{ width: 'clamp(36px, 9vw, 44px)', height: 'clamp(36px, 9vw, 44px)' }}
+            aria-label="Open settings"
           >
-            <button 
-              onClick={() => navigate('/settings')} 
-              className="w-full h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-full"
-              aria-label="Open settings"
-            >
-              <Avatar className="w-full h-full border-2 border-primary/30 cursor-pointer hover:border-primary transition-colors">
-                <AvatarImage src={avatarUrl || ""} alt="Your profile picture" />
-                <AvatarFallback className="bg-gradient-primary text-primary-foreground font-semibold text-xs sm:text-sm md:text-base">
-                  {displayName.substring(0, 2).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-            </button>
-          </div>
+            {/* Glow ring on hover */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/40 to-accent/40 opacity-0 group-hover:opacity-100 blur-md transition-opacity duration-300" />
+            
+            <Avatar className="relative w-full h-full ring-2 ring-border/50 group-hover:ring-primary/50 transition-all duration-200 shadow-sm">
+              <AvatarImage src={avatarUrl || ""} alt="Your profile picture" className="object-cover" />
+              <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground font-bold text-sm">
+                {displayName.substring(0, 2).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+          </button>
         </div>
       </div>
     </header>
