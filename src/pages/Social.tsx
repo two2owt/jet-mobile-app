@@ -134,29 +134,6 @@ export default function Social() {
     );
   }
 
-  // Show upgrade prompt for users without JET+ subscription
-  if (!canAccessSocialFeatures()) {
-    return (
-      <PageLayout defaultTab="social">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <EmptyState
-            icon={Crown}
-            title="Unlock Social Features"
-            description="Connect with friends, share deals, and discover new spots together. Upgrade to JET+ to access all social features."
-            actionLabel="Upgrade to JET+"
-            onAction={() => setShowUpgradePrompt(true)}
-          />
-        </div>
-        <UpgradePrompt
-          requiredTier="jet_plus"
-          featureName="Social features"
-          isOpen={showUpgradePrompt}
-          onClose={() => setShowUpgradePrompt(false)}
-        />
-      </PageLayout>
-    );
-  }
-
   return (
     <PageLayout defaultTab="social">
       <div className="max-w-7xl mx-auto px-fluid-md py-fluid-lg gap-fluid-xl">
