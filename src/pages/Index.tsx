@@ -481,11 +481,6 @@ const Index = () => {
         </main>
       )}
 
-      {/* For map tab, we need a spacer to push BottomNav to correct position */}
-      {activeTab === "map" && (
-        <div style={{ flex: '1 1 auto', minHeight: 0 }} />
-      )}
-
       {/* Bottom Navigation - Fixed on bottom, overlays map with glass effect */}
       <BottomNav 
         activeTab={activeTab} 
