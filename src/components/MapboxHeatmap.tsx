@@ -2279,7 +2279,7 @@ export const MapboxHeatmap = ({ onVenueSelect, venues, mapboxToken, selectedCity
       </div>
       )}
 
-      {/* CLS fix: Only render layer controls after initial paint to prevent layout shifts */}
+      {/* Layer Toggle Controls - Always visible on map */}
       {controlsReady && (
       <div 
         className="fixed z-[60] flex flex-col-reverse gap-2 sm:gap-2.5"
@@ -2292,8 +2292,9 @@ export const MapboxHeatmap = ({ onVenueSelect, venues, mapboxToken, selectedCity
           maxWidth: '140px',
           // Strict containment prevents any layout shifts from propagating
           contain: 'strict',
-          opacity: !selectedVenue ? 1 : 0,
-          pointerEvents: !selectedVenue ? 'auto' : 'none',
+          // Always visible - toggles should stay accessible regardless of venue selection
+          opacity: 1,
+          pointerEvents: 'auto',
           transform: 'translateZ(0)',
         }}
       >
