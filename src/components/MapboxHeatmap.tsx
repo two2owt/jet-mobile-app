@@ -2104,7 +2104,7 @@ export const MapboxHeatmap = ({ onVenueSelect, venues, mapboxToken, selectedCity
       <div 
         className="absolute z-10"
         style={{
-          top: 'var(--map-safe-top)',
+          top: 'var(--map-safe-top-controls, var(--map-safe-top))',
           left: 'var(--map-ui-inset-left)',
           // CLS fix: Fixed dimensions prevent layout shift when "Locating..." changes
           // Increased width to accommodate longer city names
@@ -2222,7 +2222,9 @@ export const MapboxHeatmap = ({ onVenueSelect, venues, mapboxToken, selectedCity
       <div 
         className="absolute z-10 space-y-2 sm:space-y-2.5 md:space-y-3"
         style={{
-          top: isMobile ? 'calc(var(--map-safe-top) + 3.5rem)' : 'calc(var(--map-safe-top) + 4rem)',
+          top: isMobile 
+            ? 'calc(var(--map-safe-top-controls, var(--map-safe-top)) + 3.5rem)'
+            : 'calc(var(--map-safe-top-controls, var(--map-safe-top)) + 4rem)',
           left: 'var(--map-ui-inset-left)',
           maxWidth: isMobile ? 'calc(50vw - 0.75rem)' : 'var(--map-control-max-width)',
           contain: 'layout style',
