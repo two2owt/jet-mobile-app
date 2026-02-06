@@ -56,6 +56,9 @@ All colors MUST be HSL.
     /* Map UI safe zones (keep overlays clear of Header/BottomNav) */
     --map-safe-top: calc(var(--header-total-height) + var(--map-ui-inset-top));
     --map-safe-bottom: calc(var(--bottom-nav-total-height) + var(--map-ui-inset-bottom));
+
+    /* Extra top clearance for Map UI controls to avoid glass header overlap across devices */
+    --map-safe-top-controls: calc(var(--map-safe-top) + clamp(0.5rem, 1vw, 1rem));
     
     /* For fixed positioned elements that need to clear bottom nav */
     --map-fixed-bottom: calc(var(--bottom-nav-total-height) + 0.75rem);
@@ -791,7 +794,7 @@ All colors MUST be HSL.
   /* Offset Mapbox built-in controls so they never sit under Header/BottomNav */
   .mapboxgl-ctrl-top-left,
   .mapboxgl-ctrl-top-right {
-    top: var(--map-safe-top) !important;
+    top: var(--map-safe-top-controls, var(--map-safe-top)) !important;
   }
 
   .mapboxgl-ctrl-bottom-left,
