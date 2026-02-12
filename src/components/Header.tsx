@@ -116,7 +116,7 @@ export const Header = ({
         className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border/60 to-transparent"
       />
 
-      <div className="max-w-7xl mx-auto px-fluid-sm sm:px-fluid-md md:px-fluid-lg h-full flex items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 h-full flex items-center">
         <div className="flex items-center gap-fluid-sm sm:gap-fluid-md w-full">
           
           {/* Logo with enhanced styling */}
