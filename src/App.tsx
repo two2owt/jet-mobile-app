@@ -5,6 +5,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { HeaderProvider } from "@/contexts/HeaderContext";
+import { Header } from "@/components/Header";
 import { NavigationShell } from "@/components/NavigationShell";
 
 
@@ -48,34 +50,38 @@ const PageTracker = memo(function PageTracker() {
 const App = () => (
   <ErrorBoundary>
     <AuthProvider>
-      <TooltipProvider>
-        <div className="app-wrapper">
-          <Toaster />
-          <Sonner />
-          <PageTracker />
-          
-          
-          <Suspense fallback={<NavigationShell />}>
-            <Routes>
-              {/* Main route - eagerly loaded for fastest render */}
-              <Route path="/" element={<Index />} />
-              
-              {/* Other routes - lazy loaded */}
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/onboarding" element={<Onboarding />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/favorites" element={<Favorites />} />
-              <Route path="/social" element={<Social />} />
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/verification-success" element={<VerificationSuccess />} />
-              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="/terms-of-service" element={<TermsOfService />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </div>
-      </TooltipProvider>
+      <HeaderProvider>
+        <TooltipProvider>
+          <div className="app-wrapper">
+            <Toaster />
+            <Sonner />
+            <PageTracker />
+            
+            {/* Header is now global, outside route Suspense */}
+            <Header />
+            
+            <Suspense fallback={<NavigationShell />}>
+              <Routes>
+                {/* Main route - eagerly loaded for fastest render */}
+                <Route path="/" element={<Index />} />
+                
+                {/* Other routes - lazy loaded */}
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/onboarding" element={<Onboarding />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/favorites" element={<Favorites />} />
+                <Route path="/social" element={<Social />} />
+                <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/verification-success" element={<VerificationSuccess />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-of-service" element={<TermsOfService />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </div>
+        </TooltipProvider>
+      </HeaderProvider>
     </AuthProvider>
   </ErrorBoundary>
 );

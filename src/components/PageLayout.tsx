@@ -1,9 +1,9 @@
-import { ReactNode } from "react";
-import { Header } from "./Header";
+import { ReactNode, useEffect } from "react";
 import { BottomNav } from "./BottomNav";
 import { useBottomNavigation, type NavTab } from "@/hooks/useBottomNavigation";
 import { useNotifications } from "@/hooks/useNotifications";
-import type { Venue } from "./MapboxHeatmap";
+import { useHeaderConfig } from "@/contexts/HeaderContext";
+import type { Venue } from "@/types/venue";
 import type { Database } from "@/integrations/supabase/types";
 
 type Deal = Database['public']['Tables']['deals']['Row'];
@@ -31,7 +31,7 @@ interface PageLayoutProps {
   children: ReactNode;
   /** Default tab for this page */
   defaultTab?: NavTab;
-  /** Header configuration - omit for shell header with empty data */
+  /** Header configuration - sets context for the global Header */
   headerConfig?: HeaderConfig;
   /** Whether this is a full-bleed page like map (no padding) */
   fullBleed?: boolean;
@@ -45,7 +45,7 @@ interface PageLayoutProps {
 
 /**
  * Shared page layout component that provides consistent structure:
- * - Header (with search, sync status, avatar)
+ * - Configures the global Header via context
  * - Main content area (with proper CSS variable sizing for CLS prevention)
  * - BottomNav (with consistent navigation handling)
  * 
@@ -62,21 +62,34 @@ export function PageLayout({
 }: PageLayoutProps) {
   const { activeTab, handleTabChange } = useBottomNavigation({ defaultTab });
   const { notifications } = useNotifications();
+  const setHeaderConfig = useHeaderConfig();
 
   // Use provided notification count or calculate from notifications
   const unreadCount = notificationCount ?? notifications.filter(n => !n.read).length;
 
-  // Default header config for shell pages
-  const {
-    venues = [],
-    deals = [],
-    onVenueSelect = () => {},
-    isLoading,
-    lastUpdated,
-    onRefresh,
-    cityName,
-    hideSearch,
-  } = headerConfig;
+  // Sync header config to context whenever it changes
+  useEffect(() => {
+    setHeaderConfig({
+      venues: headerConfig.venues ?? [],
+      deals: headerConfig.deals ?? [],
+      onVenueSelect: headerConfig.onVenueSelect ?? (() => {}),
+      isLoading: headerConfig.isLoading,
+      lastUpdated: headerConfig.lastUpdated,
+      onRefresh: headerConfig.onRefresh,
+      cityName: headerConfig.cityName,
+      hideSearch: headerConfig.hideSearch ?? false,
+    });
+  }, [
+    headerConfig.venues,
+    headerConfig.deals,
+    headerConfig.onVenueSelect,
+    headerConfig.isLoading,
+    headerConfig.lastUpdated,
+    headerConfig.onRefresh,
+    headerConfig.cityName,
+    headerConfig.hideSearch,
+    setHeaderConfig,
+  ]);
 
   return (
     <div
@@ -89,17 +102,6 @@ export function PageLayout({
         paddingTop: 'var(--header-total-height)',
       }}
     >
-      <Header
-        venues={venues}
-        deals={deals}
-        onVenueSelect={onVenueSelect}
-        isLoading={isLoading}
-        lastUpdated={lastUpdated}
-        onRefresh={onRefresh}
-        cityName={cityName}
-        hideSearch={hideSearch}
-      />
-
       <main
         role="main"
         className={`main-content ${fullBleed ? '' : 'page-container'} ${mainClassName}`}

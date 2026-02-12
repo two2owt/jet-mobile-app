@@ -1,11 +1,10 @@
-import { Header } from "./Header";
 import { BottomNav } from "./BottomNav";
 import { useBottomNavigation } from "@/hooks/useBottomNavigation";
 
 /**
  * Persistent navigation shell rendered as Suspense fallback.
- * Ensures Header and BottomNav are always visible during lazy page loads,
- * preventing layout shifts and visual flicker on route transitions.
+ * Header is now rendered globally in App.tsx via HeaderContext,
+ * so this shell only provides the BottomNav and content placeholder.
  */
 export function NavigationShell() {
   const { activeTab, handleTabChange } = useBottomNavigation({ defaultTab: "map" });
@@ -20,12 +19,6 @@ export function NavigationShell() {
         paddingTop: 'var(--header-total-height)',
       }}
     >
-      <Header
-        venues={[]}
-        deals={[]}
-        onVenueSelect={() => {}}
-      />
-
       <main
         role="main"
         style={{

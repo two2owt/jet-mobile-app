@@ -3,40 +3,23 @@ import { Search, Sparkles } from "lucide-react";
 import { Input } from "./ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useNavigate } from "react-router-dom";
-import type { Venue } from "./MapboxHeatmap";
-import type { Database } from "@/integrations/supabase/types";
 import { supabase } from "@/integrations/supabase/client";
 import { useSearchHistory } from "@/hooks/useSearchHistory";
 import { SearchResults } from "./SearchResults";
-
-type Deal = Database['public']['Tables']['deals']['Row'];
+import { useHeaderContext } from "@/contexts/HeaderContext";
 
 const validateSearchQuery = (value: string): boolean => {
   return typeof value === 'string' && value.length <= 100;
 };
 
-interface HeaderProps {
-  venues: Venue[];
-  deals: Deal[];
-  onVenueSelect: (venue: Venue) => void;
-  isLoading?: boolean;
-  lastUpdated?: Date | null;
-  onRefresh?: () => void;
-  cityName?: string;
-  /** Hide the search bar (e.g. on non-map pages) */
-  hideSearch?: boolean;
-}
+export const Header = () => {
+  const {
+    venues,
+    deals,
+    onVenueSelect,
+    hideSearch,
+  } = useHeaderContext();
 
-export const Header = ({
-  venues,
-  deals,
-  onVenueSelect,
-  isLoading,
-  lastUpdated,
-  onRefresh,
-  cityName,
-  hideSearch = false,
-}: HeaderProps) => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [showResults, setShowResults] = useState(false);

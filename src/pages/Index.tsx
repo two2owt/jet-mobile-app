@@ -1,12 +1,12 @@
-import { useState, useEffect, useRef, lazy, Suspense, useCallback } from "react";
+import { useState, useEffect, useRef, lazy, Suspense, useCallback, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { type Venue } from "@/types/venue";
 import { CITIES, type City } from "@/types/cities";
 
-// Critical path: Header and BottomNav are always visible
+// Critical path: BottomNav is always visible
 import { BottomNav } from "@/components/BottomNav";
-import { Header } from "@/components/Header";
+import { useHeaderConfig } from "@/contexts/HeaderContext";
 
 
 // Hooks must be imported synchronously (React rules)
@@ -298,6 +298,27 @@ const Index = () => {
     setShowDirectionsDialog(true);
   }, [selectedVenue]);
 
+  // Set header config via context so the global Header gets Index-specific data
+  const setHeaderConfig = useHeaderConfig();
+  const refreshBoth = useCallback(() => {
+    refreshDeals();
+    refreshVenues();
+  }, [refreshDeals, refreshVenues]);
+  const cityName = detectedLocationName || `${selectedCity.name}, ${selectedCity.state}`;
+
+  useEffect(() => {
+    setHeaderConfig({
+      venues,
+      deals,
+      onVenueSelect: handleVenueSelect,
+      isLoading: dealsLoading || venuesLoading,
+      lastUpdated: dealsLastUpdated || venuesLastUpdated,
+      onRefresh: refreshBoth,
+      cityName,
+      hideSearch: false,
+    });
+  }, [venues, deals, handleVenueSelect, dealsLoading, venuesLoading, dealsLastUpdated, venuesLastUpdated, refreshBoth, cityName, setHeaderConfig]);
+
   return (
     <div 
       className="relative w-full h-full"
@@ -412,19 +433,7 @@ const Index = () => {
         </div>
       )}
 
-      {/* HEADER - Fixed on top, overlays map with glass effect */}
-      <Header 
-        venues={venues}
-        deals={deals}
-        onVenueSelect={handleVenueSelect}
-        isLoading={dealsLoading || venuesLoading}
-        lastUpdated={dealsLastUpdated || venuesLastUpdated}
-        onRefresh={() => {
-          refreshDeals();
-          refreshVenues();
-        }}
-        cityName={detectedLocationName || `${selectedCity.name}, ${selectedCity.state}`}
-      />
+      {/* Header config is set via context (useEffect below) */}
 
       {/* Offline Banner - lazy loaded, non-critical */}
       <Suspense fallback={null}>
