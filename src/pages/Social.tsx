@@ -97,7 +97,7 @@ export default function Social() {
 
   if (!user) {
     return (
-      <PageLayout defaultTab="social" notificationCount={0}>
+      <PageLayout defaultTab="social" notificationCount={0} headerConfig={{ hideSearch: true }}>
         <div className="max-w-7xl mx-auto px-fluid-md py-fluid-lg">
           <EmptyState
             icon={Users}
@@ -114,7 +114,7 @@ export default function Social() {
   // Show upgrade prompt for users without JET+ subscription
   if (!canAccessSocialFeatures()) {
     return (
-      <PageLayout defaultTab="social">
+      <PageLayout defaultTab="social" headerConfig={{ hideSearch: true }}>
         <div className="max-w-7xl mx-auto px-fluid-md py-fluid-lg">
           <EmptyState
             icon={Crown}
@@ -135,7 +135,7 @@ export default function Social() {
   }
 
   return (
-    <PageLayout defaultTab="social">
+    <PageLayout defaultTab="social" headerConfig={{ hideSearch: true }}>
       <div className="max-w-7xl mx-auto px-fluid-md py-fluid-lg space-y-fluid-xl">
         {/* Pending Requests */}
         {pendingRequests.length > 0 && (

@@ -23,6 +23,8 @@ interface HeaderConfig {
   onRefresh?: () => void;
   /** City name for sync indicator */
   cityName?: string;
+  /** Hide search bar */
+  hideSearch?: boolean;
 }
 
 interface PageLayoutProps {
@@ -73,6 +75,7 @@ export function PageLayout({
     lastUpdated,
     onRefresh,
     cityName,
+    hideSearch,
   } = headerConfig;
 
   return (
@@ -94,6 +97,7 @@ export function PageLayout({
         lastUpdated={lastUpdated}
         onRefresh={onRefresh}
         cityName={cityName}
+        hideSearch={hideSearch}
       />
 
       <main
