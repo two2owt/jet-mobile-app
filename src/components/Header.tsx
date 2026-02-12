@@ -23,6 +23,8 @@ interface HeaderProps {
   lastUpdated?: Date | null;
   onRefresh?: () => void;
   cityName?: string;
+  /** Hide the search bar (e.g. on non-map pages) */
+  hideSearch?: boolean;
 }
 
 export const Header = ({
@@ -32,7 +34,8 @@ export const Header = ({
   isLoading,
   lastUpdated,
   onRefresh,
-  cityName
+  cityName,
+  hideSearch = false,
 }: HeaderProps) => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
@@ -138,6 +141,7 @@ export const Header = ({
           </a>
           
           {/* Enhanced search bar */}
+          {!hideSearch && (
           <div 
             className="relative flex-1 max-w-xs sm:max-w-sm"
             style={{ minWidth: '120px' }}
@@ -165,6 +169,7 @@ export const Header = ({
               isVisible={showResults} 
             />
           </div>
+          )}
 
           {/* Spacer */}
           <div className="flex-1 min-w-0" />

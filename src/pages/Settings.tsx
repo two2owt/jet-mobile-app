@@ -216,6 +216,7 @@ const Settings = () => {
         venues={[]}
         deals={[]}
         onVenueSelect={() => {}}
+        hideSearch
       />
       
       <main
