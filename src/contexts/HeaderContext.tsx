@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useMemo, ReactNode } from "react";
 import type { Venue } from "@/types/venue";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -57,8 +57,17 @@ export const HeaderProvider = ({ children }: HeaderProviderProps) => {
     setConfig(prev => ({ ...prev, ...partial }));
   }, []);
 
+  // Memoize the full context value so consumers only re-render when config actually changes,
+  // not on every HeaderProvider render. This prevents the infinite-loop caused by
+  // `{ ...config, setHeaderConfig }` creating a new object reference each render.
+  const contextValue = useMemo(
+    () => ({ ...config, setHeaderConfig }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [config, setHeaderConfig]
+  );
+
   return (
-    <HeaderContext.Provider value={{ ...config, setHeaderConfig }}>
+    <HeaderContext.Provider value={contextValue}>
       {children}
     </HeaderContext.Provider>
   );
