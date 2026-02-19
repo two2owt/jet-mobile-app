@@ -5,8 +5,7 @@ import { componentTagger } from "lovable-tagger";
 import { VitePWA } from "vite-plugin-pwa";
 import cssnano from "cssnano";
 import { visualizer } from "rollup-plugin-visualizer";
-// @ts-ignore - critters types are in a non-standard location
-import Critters from "critters";
+// Critters import removed — plugin disabled (caused nav CSS deferral in prod)
 import fs from "fs";
 
 // ---------------------------------------------------------------------------
@@ -327,37 +326,12 @@ export default defineConfig(({ mode }) => ({
     //     );
     //   },
     // },
-    // Critical CSS extraction - inlines above-the-fold styles
-    mode === 'production' && {
-      name: 'critters-plugin',
-      async transformIndexHtml(html: string) {
-        try {
-          const critters = new Critters({
-            // Inline critical CSS
-            inlineThreshold: 0,
-            // Preload remaining CSS
-            preload: 'swap',
-            // Don't remove original CSS (already handled by css-preload plugin)
-            pruneSource: false,
-            // Reduce unused CSS
-            reduceInlineStyles: true,
-            // Inline fonts for faster LCP
-            inlineFonts: true,
-            // Compress inlined CSS
-            compress: true,
-            // Don't merge stylesheets
-            mergeStylesheets: false,
-            // Add noscript fallback
-            noscriptFallback: true,
-          });
-          
-          return await critters.process(html);
-        } catch (e) {
-          console.warn('Critters CSS extraction failed, using original HTML:', e);
-          return html;
-        }
-      },
-    },
+    // Critters CSS extraction is DISABLED.
+    // Using preload:'swap' caused the Header and BottomNav stylesheet rules to be
+    // deferred, making the nav elements invisible on first production load.
+    // The critical layout variables and nav shell styles are now inlined directly
+    // in index.html, so Critters is not needed for above-the-fold correctness.
+    // mode === 'production' && { name: 'critters-plugin', ... },
     VitePWA({
       registerType: "autoUpdate",
       // Defer service worker registration to avoid render-blocking
