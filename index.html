@@ -77,39 +77,66 @@
       })();
     </script>
     
-    <!-- Critical CSS -->
+    <!-- Critical CSS: must define ALL layout variables used by fixed nav components
+         to prevent CLS and invisible-nav issues in production. -->
     <style>
       :root {
         --background: 0 0% 98%;
         --foreground: 0 0% 10%;
         --card: 0 0% 100%;
+        --card-foreground: 0 0% 10%;
         --border: 0 0% 85%;
+        --primary: 24 100% 50%;
+        --accent: 320 80% 55%;
+        --muted-foreground: 0 0% 40%;
+        --secondary: 0 0% 92%;
+
+        /* Layout height variables — MUST be defined here so Header/BottomNav
+           render at the correct size before the full CSS bundle loads.
+           Values must exactly match src/index.css :root. */
+        --safe-area-inset-top: env(safe-area-inset-top, 0px);
+        --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+        --safe-area-inset-left: env(safe-area-inset-left, 0px);
+        --safe-area-inset-right: env(safe-area-inset-right, 0px);
+        --header-height: 52px;
+        --bottom-nav-height: 60px;
+        --header-total-height: calc(var(--header-height) + var(--safe-area-inset-top));
+        --bottom-nav-total-height: calc(var(--bottom-nav-height) + var(--safe-area-inset-bottom));
+        --main-height: calc(100dvh - var(--header-total-height) - var(--bottom-nav-total-height));
       }
-      :root.dark, html.dark, :root:not(.light) {
+      :root.dark, html.dark {
         --background: 0 0% 6%;
         --foreground: 0 0% 98%;
         --card: 0 0% 10%;
+        --card-foreground: 0 0% 98%;
         --border: 0 0% 20%;
+        --primary: 24 100% 55%;
+        --accent: 320 80% 60%;
+        --muted-foreground: 0 0% 60%;
+        --secondary: 0 0% 14%;
       }
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
       html { height: 100%; background: hsl(var(--background)); }
-      body { 
-        height: 100dvh; 
-        margin: 0; 
-        overflow: hidden; 
-        background: hsl(var(--background)); 
+      body {
+        height: 100dvh;
+        margin: 0;
+        overflow: hidden;
+        background: hsl(var(--background));
         color: hsl(var(--foreground));
         font-family: system-ui, -apple-system, sans-serif;
         position: fixed;
         inset: 0;
+        display: flex;
+        flex-direction: column;
       }
-      #root { 
-        display: flex; 
-        flex-direction: column; 
-        flex: 1; 
-        height: 100dvh; 
+      #root {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        height: 100dvh;
         overflow: hidden;
         background: hsl(var(--background));
+        position: relative;
       }
       #root:empty::before {
         content: '';
@@ -117,6 +144,45 @@
         inset: 0;
         background: hsl(var(--background));
         z-index: 99999;
+      }
+      /* Ensure .app-wrapper never clips fixed Header/BottomNav */
+      .app-wrapper {
+        display: flex;
+        flex-direction: column;
+        min-height: 100dvh;
+        height: 100dvh;
+        width: 100%;
+        position: relative;
+        flex: 1;
+        background: hsl(var(--background));
+        overflow: hidden;
+        box-sizing: border-box;
+      }
+      /* Header shell — prevents layout shift before JS hydrates */
+      header[role="banner"] {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 60;
+        height: var(--header-total-height);
+        min-height: var(--header-total-height);
+        max-height: var(--header-total-height);
+        background: hsl(var(--card) / 0.85);
+        flex-shrink: 0;
+      }
+      /* BottomNav shell — prevents layout shift before JS hydrates */
+      nav[role="navigation"][aria-label="Main navigation"] {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        height: var(--bottom-nav-total-height);
+        min-height: var(--bottom-nav-total-height);
+        max-height: var(--bottom-nav-total-height);
+        background: hsl(var(--card) / 0.90);
+        flex-shrink: 0;
       }
       .skip-link { position: absolute; left: -9999px; z-index: 10000; }
       .skip-link:focus {
