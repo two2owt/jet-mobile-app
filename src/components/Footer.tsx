@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { Mail, Shield, FileText } from "lucide-react";
 
 // Routes where the footer should be hidden
 const HIDDEN_ROUTES = ["/auth", "/onboarding"];
@@ -12,10 +13,35 @@ export const Footer = () => {
     return null;
   }
 
+  const footerLinks = [
+    {
+      icon: Mail,
+      label: "Contact",
+      href: "mailto:creativebreakroominfo@gmail.com",
+      isExternal: true,
+    },
+    {
+      icon: Shield,
+      label: "Privacy",
+      to: "/privacy-policy",
+      isExternal: false,
+    },
+    {
+      icon: FileText,
+      label: "Terms",
+      to: "/terms-of-service",
+      isExternal: false,
+    },
+  ];
+
   return (
     <footer 
       className="relative text-foreground border-t-0"
       role="contentinfo"
+      style={{
+        position: 'relative',
+        color: 'hsl(var(--foreground))',
+      }}
     >
       {/* Glassmorphic background layer */}
       <div 
@@ -34,30 +60,88 @@ export const Footer = () => {
         className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border/60 to-transparent"
       />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 py-5 sm:py-6" style={{ maxWidth: '56rem', marginLeft: 'auto', marginRight: 'auto', padding: '1.25rem 1rem' }}>
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-muted-foreground" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem' }}>
-          <p className="font-medium">© {new Date().getFullYear()} Jet Mobile App</p>
-          <div className="flex gap-5 sm:gap-6">
-            <a 
-              href="mailto:creativebreakroominfo@gmail.com"
-              className="hover:text-foreground transition-colors duration-200"
-            >
-              Contact
-            </a>
-            <Link 
-              to="/privacy-policy" 
-              className="hover:text-foreground transition-colors duration-200"
-            >
-              Privacy
-            </Link>
-            <Link 
-              to="/terms-of-service" 
-              className="hover:text-foreground transition-colors duration-200"
-            >
-              Terms
-            </Link>
-          </div>
+      <div
+        className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 py-5 sm:py-6"
+        style={{
+          maxWidth: '56rem',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          padding: '1.25rem 1rem',
+          boxSizing: 'border-box',
+        }}
+      >
+        {/* Top row: equally spaced icon links */}
+        <div
+          className="flex items-center justify-around gap-4 sm:gap-6"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-around',
+            gap: '1rem',
+            width: '100%',
+          }}
+        >
+          {footerLinks.map((link) => {
+            const Icon = link.icon;
+            const content = (
+              <span
+                className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors duration-200 group"
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '0.25rem',
+                  minWidth: 'clamp(52px, 14vw, 72px)',
+                }}
+              >
+                <Icon
+                  className="w-5 h-5 sm:w-[22px] sm:h-[22px] group-hover:scale-110 transition-transform duration-200"
+                  strokeWidth={1.8}
+                  aria-hidden="true"
+                />
+                <span className="text-[10px] sm:text-xs font-medium whitespace-nowrap">
+                  {link.label}
+                </span>
+              </span>
+            );
+
+            if (link.isExternal) {
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg px-2 py-1"
+                  aria-label={link.label}
+                >
+                  {content}
+                </a>
+              );
+            }
+
+            return (
+              <Link
+                key={link.label}
+                to={link.to!}
+                className="focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg px-2 py-1"
+                aria-label={link.label}
+              >
+                {content}
+              </Link>
+            );
+          })}
         </div>
+
+        {/* Bottom row: copyright */}
+        <p
+          className="text-center text-xs text-muted-foreground mt-3 sm:mt-4 font-medium"
+          style={{
+            textAlign: 'center',
+            marginTop: '0.75rem',
+            fontSize: '0.75rem',
+          }}
+        >
+          © {new Date().getFullYear()} Jet Mobile App
+        </p>
       </div>
     </footer>
   );
