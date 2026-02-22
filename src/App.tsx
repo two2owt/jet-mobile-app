@@ -21,6 +21,7 @@ const Profile = lazy(() => import("./pages/Profile"));
 const Settings = lazy(() => import("./pages/Settings"));
 const Favorites = lazy(() => import("./pages/Favorites"));
 const Social = lazy(() => import("./pages/Social"));
+const Messages = lazy(() => import("./pages/Messages"));
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
@@ -88,6 +89,7 @@ const App = () => (
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/favorites" element={<Favorites />} />
                 <Route path="/social" element={<Social />} />
+                <Route path="/messages" element={<Messages />} />
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/verification-success" element={<VerificationSuccess />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />

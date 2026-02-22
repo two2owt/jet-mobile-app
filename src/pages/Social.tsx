@@ -142,6 +142,23 @@ export default function Social() {
   return (
     <PageLayout defaultTab="social" headerConfig={{ hideSearch: true }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 py-fluid-lg space-y-fluid-xl">
+        {/* Messages shortcut */}
+        <Button
+          variant="outline"
+          onClick={() => navigate("/messages")}
+          className="w-full justify-between"
+        >
+          <span className="flex items-center gap-2">
+            <MessageCircle className="w-4 h-4" />
+            Messages
+          </span>
+          {Object.values(unreadCounts).reduce((a, b) => a + b, 0) > 0 && (
+            <Badge className="bg-destructive text-destructive-foreground">
+              {Object.values(unreadCounts).reduce((a, b) => a + b, 0)}
+            </Badge>
+          )}
+        </Button>
+
         {/* Pending Requests */}
         {pendingRequests.length > 0 && (
           <div>
