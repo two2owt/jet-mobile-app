@@ -347,7 +347,7 @@ export default function Profile() {
     <PageLayout defaultTab="map" headerConfig={{ hideSearch: true }}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 py-fluid-lg space-y-fluid-lg">
           {/* Profile Header */}
-          <Card className="p-6 bg-card/90 backdrop-blur-sm">
+          <Card className="p-6 bg-card/90 backdrop-blur-sm shadow-card">
             <div className="flex items-start justify-between mb-6">
               <div>
                 <h1 className="text-2xl font-bold text-foreground mb-1">Profile</h1>
@@ -524,7 +524,7 @@ export default function Profile() {
                 </>}
 
               {isEditing && <div className="flex gap-2 pt-4">
-                  <Button onClick={handleSaveProfile} disabled={isSaving || !displayName.trim()} className="flex-1">
+                  <Button onClick={handleSaveProfile} disabled={isSaving || !displayName.trim()} className="flex-1" variant="jet">
                     {isSaving ? <>
                         <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                         Saving...
@@ -554,7 +554,7 @@ export default function Profile() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Button variant="outline" className="h-20 justify-start" onClick={() => navigate("/settings")}>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/15 to-accent/15 flex items-center justify-center">
                   <Settings className="w-5 h-5 text-primary" />
                 </div>
                 <div className="text-left">
@@ -566,7 +566,7 @@ export default function Profile() {
 
             <Button variant="outline" className="h-20 justify-start" onClick={() => navigate("/favorites")}>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-accent/15 to-primary/15 flex items-center justify-center">
                   <Heart className="w-5 h-5 text-accent" />
                 </div>
                 <div className="text-left">
@@ -578,7 +578,7 @@ export default function Profile() {
 
             <Button variant="outline" className="h-20 justify-start" onClick={() => navigate("/social")}>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
                   <Users className="w-5 h-5 text-[#c37bf9]" />
                 </div>
                 <div className="text-left">
@@ -602,7 +602,7 @@ export default function Profile() {
           </div>
 
           {/* Sign Out */}
-          <Card className="p-4 bg-card/90 backdrop-blur-sm">
+          <Card className="p-4 bg-card/90 backdrop-blur-sm shadow-card">
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="destructive" className="w-full">
