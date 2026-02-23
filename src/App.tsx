@@ -68,9 +68,9 @@ const App = () => (
               aria-hidden="true"
               style={{
                 width: '100%',
-                height: 'var(--header-total-height)',
-                minHeight: 'var(--header-total-height)',
-                maxHeight: 'var(--header-total-height)',
+                height: 'var(--header-total-height, 52px)',
+                minHeight: 'var(--header-total-height, 52px)',
+                maxHeight: 'var(--header-total-height, 52px)',
                 flexShrink: 0,
                 visibility: 'hidden',
                 pointerEvents: 'none',
