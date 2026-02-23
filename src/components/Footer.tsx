@@ -45,19 +45,19 @@ export const Footer = () => {
     >
       {/* Glassmorphic background layer */}
       <div 
-        className="absolute inset-0 bg-card/85 backdrop-blur-2xl"
+        className="absolute inset-0 bg-card/80 backdrop-blur-2xl saturate-150"
         style={{ zIndex: -1 }}
       />
       
-      {/* Subtle gradient overlay for depth */}
+      {/* Brand gradient overlay for depth */}
       <div 
-        className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5"
+        className="absolute inset-0 bg-gradient-to-r from-primary/8 via-transparent to-accent/8"
         style={{ zIndex: -1 }}
       />
       
-      {/* Top border with gradient */}
+      {/* Top border with brand gradient */}
       <div 
-        className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border/60 to-transparent"
+        className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-primary/30 via-accent/40 to-primary/30"
       />
 
       <div

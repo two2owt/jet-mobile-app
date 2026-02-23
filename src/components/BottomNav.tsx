@@ -42,22 +42,22 @@ export const BottomNav = ({ activeTab, onTabChange, notificationCount = 0, onPre
     >
       {/* Glassmorphic background */}
       <div 
-        className="absolute inset-0 bg-card/90 backdrop-blur-2xl"
+        className="absolute inset-0 bg-card/80 backdrop-blur-2xl saturate-150"
         style={{ zIndex: -1 }}
       />
       
-      {/* Subtle gradient overlay */}
+      {/* Brand gradient overlay */}
       <div 
-        className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent"
+        className="absolute inset-0 bg-gradient-to-t from-primary/5 via-transparent to-accent/5"
         style={{ zIndex: -1 }}
       />
       
-      {/* Top border with gradient */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border/60 to-transparent" />
+      {/* Top border with brand gradient */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-primary/30 via-accent/40 to-primary/30" />
       
       {/* Soft shadow above */}
       <div 
-        className="absolute -top-4 left-0 right-0 h-4 bg-gradient-to-t from-black/5 to-transparent pointer-events-none"
+        className="absolute -top-4 left-0 right-0 h-4 bg-gradient-to-t from-black/8 to-transparent pointer-events-none"
         style={{ zIndex: -1 }}
       />
 
@@ -95,9 +95,9 @@ export const BottomNav = ({ activeTab, onTabChange, notificationCount = 0, onPre
                 {/* Active indicator pill */}
                 {isActive && (
                   <div 
-                    className="absolute inset-x-2 -top-0.5 h-0.5 rounded-full bg-gradient-to-r from-primary via-primary to-accent"
+                    className="absolute inset-x-1.5 -top-0.5 h-[3px] rounded-full bg-gradient-to-r from-primary via-accent to-primary"
                     style={{
-                      boxShadow: '0 0 8px hsl(var(--primary) / 0.5)',
+                      boxShadow: '0 0 12px hsl(var(--primary) / 0.6), 0 0 4px hsl(var(--accent) / 0.4)',
                     }}
                   />
                 )}
@@ -107,8 +107,8 @@ export const BottomNav = ({ activeTab, onTabChange, notificationCount = 0, onPre
                   className={`
                     absolute inset-1 rounded-lg transition-all duration-200
                     ${isActive 
-                      ? "bg-primary/10" 
-                      : "bg-transparent hover:bg-secondary/50"
+                      ? "bg-gradient-to-b from-primary/15 to-accent/10" 
+                      : "bg-transparent hover:bg-primary/5"
                     }
                   `}
                 />
