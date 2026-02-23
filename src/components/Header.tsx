@@ -90,19 +90,19 @@ export const Header = () => {
     >
       {/* Glassmorphic background layer */}
       <div 
-        className="absolute inset-0 bg-card/85 backdrop-blur-2xl"
+        className="absolute inset-0 bg-card/80 backdrop-blur-2xl saturate-150"
         style={{ zIndex: -1 }}
       />
       
-      {/* Subtle gradient overlay for depth */}
+      {/* Brand gradient overlay for depth */}
       <div 
-        className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5"
+        className="absolute inset-0 bg-gradient-to-r from-primary/8 via-transparent to-accent/8"
         style={{ zIndex: -1 }}
       />
       
-      {/* Bottom border with gradient */}
+      {/* Bottom border with brand gradient */}
       <div 
-        className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border/60 to-transparent"
+        className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-primary/30 via-accent/40 to-primary/30"
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 h-full flex items-center" style={{ display: 'flex', alignItems: 'center', height: '100%', paddingLeft: '1rem', paddingRight: '1rem', overflow: 'hidden' }}>
@@ -119,9 +119,9 @@ export const Header = () => {
             }} 
             aria-label="JET - Go to home"
           >
-            <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-primary opacity-80 group-hover:opacity-100 transition-opacity" style={{ width: '16px', height: '16px', flexShrink: 0 }} />
+            <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-primary drop-shadow-[0_0_6px_hsl(var(--primary)/0.5)] group-hover:scale-110 transition-all duration-300" style={{ width: '16px', height: '16px', flexShrink: 0 }} />
             <h1 
-              className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight bg-gradient-to-r from-foreground via-foreground to-primary bg-clip-text leading-none group-hover:from-primary group-hover:to-accent transition-all duration-300"
+              className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent leading-none group-hover:drop-shadow-[0_0_8px_hsl(var(--primary)/0.4)] transition-all duration-300"
               style={{ fontSize: '1.25rem', fontWeight: 900, lineHeight: 1, margin: 0 }}
               // @ts-expect-error - elementtiming is a valid HTML attribute for LCP tracking
               elementtiming="lcp-brand"
@@ -150,7 +150,7 @@ export const Header = () => {
               onFocus={() => searchQuery.trim() && setShowResults(true)} 
               maxLength={100} 
               aria-label="Search venues and deals" 
-              className="w-full pl-9 pr-3 h-9 sm:h-10 rounded-xl bg-secondary/40 border-border/40 hover:bg-secondary/60 focus:bg-secondary/80 focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-all duration-200 text-sm placeholder:text-muted-foreground/60" 
+              className="w-full pl-9 pr-3 h-9 sm:h-10 rounded-xl bg-secondary/50 border-primary/10 hover:bg-secondary/70 hover:border-primary/20 focus:bg-secondary/80 focus:border-primary/40 focus:ring-1 focus:ring-primary/30 transition-all duration-200 text-sm placeholder:text-muted-foreground/60 shadow-sm" 
               style={{ width: '100%', paddingLeft: '2.25rem', height: '36px', boxSizing: 'border-box' }}
             />
             
@@ -178,9 +178,9 @@ export const Header = () => {
             {/* Glow ring on hover */}
             <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/40 to-accent/40 opacity-0 group-hover:opacity-100 blur-md transition-opacity duration-300" />
             
-            <Avatar className="relative w-full h-full ring-2 ring-border/50 group-hover:ring-primary/50 transition-all duration-200 shadow-sm">
+            <Avatar className="relative w-full h-full ring-2 ring-primary/30 group-hover:ring-primary/60 transition-all duration-300 shadow-glow">
               <AvatarImage src={avatarUrl || ""} alt="Your profile picture" className="object-cover" />
-              <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground font-bold text-sm">
+              <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground font-black text-sm">
                 {displayName.substring(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
