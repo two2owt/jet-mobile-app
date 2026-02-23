@@ -129,8 +129,8 @@ function ConversationList({
 
   return (
     <div className="flex flex-col">
-      <div className="px-4 py-3 border-b border-border">
-        <h1 className="text-fluid-xl font-bold text-foreground">Messages</h1>
+      <div className="px-4 py-3 border-b border-border/60">
+        <h1 className="text-fluid-xl font-bold bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">Messages</h1>
       </div>
       <ScrollArea className="flex-1">
         <div className="divide-y divide-border">
@@ -143,7 +143,7 @@ function ConversationList({
               <div className="relative flex-shrink-0">
                 <Avatar className="w-12 h-12">
                   <AvatarImage src={c.friendAvatar || undefined} alt={c.friendName} />
-                  <AvatarFallback className="bg-primary/10 text-primary">
+                  <AvatarFallback className="bg-gradient-to-br from-primary/15 to-accent/15 text-primary">
                     {c.friendName.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
@@ -235,13 +235,13 @@ function ChatView({
   return (
     <div className="flex flex-col h-full">
       {/* Chat header */}
-      <div className="flex items-center gap-3 px-4 py-3 border-b border-border">
+      <div className="flex items-center gap-3 px-4 py-3 border-b border-border/60 bg-card/60 backdrop-blur-sm">
         <Button variant="ghost" size="icon" onClick={onBack} className="flex-shrink-0">
           <ArrowLeft className="w-5 h-5" />
         </Button>
         <Avatar className="w-9 h-9">
           <AvatarImage src={friend?.friendAvatar || undefined} alt={friend?.friendName || "Friend"} />
-          <AvatarFallback className="bg-primary/10 text-primary text-sm">
+          <AvatarFallback className="bg-gradient-to-br from-primary/15 to-accent/15 text-primary text-sm">
             {(friend?.friendName || "F").charAt(0).toUpperCase()}
           </AvatarFallback>
         </Avatar>
@@ -323,7 +323,7 @@ function ChatView({
       </ScrollArea>
 
       {/* Input bar */}
-      <div className="px-4 py-3 border-t border-border flex items-center gap-2">
+      <div className="px-4 py-3 border-t border-border/60 bg-card/60 backdrop-blur-sm flex items-center gap-2">
         <input
           type="file"
           accept="image/*"
@@ -350,7 +350,7 @@ function ChatView({
           onClick={handleSend}
           disabled={!text.trim()}
           size="icon"
-          className="flex-shrink-0"
+          className="flex-shrink-0 bg-gradient-primary"
         >
           <Send className="w-4 h-4" />
         </Button>

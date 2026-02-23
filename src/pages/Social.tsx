@@ -162,19 +162,19 @@ export default function Social() {
         {/* Pending Requests */}
         {pendingRequests.length > 0 && (
           <div>
-            <h2 className="text-fluid-xl sm:text-fluid-2xl font-bold text-foreground mb-fluid-md">
+            <h2 className="text-fluid-xl sm:text-fluid-2xl font-black bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent mb-fluid-md">
               Friend Requests ({pendingRequests.length})
             </h2>
             <div className="space-y-fluid-sm">
               {pendingRequests.map((request) => (
                 <div
                   key={request.id}
-                  className="bg-card border border-border rounded-xl p-4 flex items-center justify-between"
+                  className="bg-card/90 backdrop-blur-sm border border-border/60 rounded-xl p-4 flex items-center justify-between shadow-card"
                 >
                   <div className="flex items-center gap-3">
                     <Avatar className="w-12 h-12">
                       <AvatarImage src={request.profile?.avatar_url || undefined} alt={request.profile?.display_name || "User"} />
-                      <AvatarFallback className="bg-primary/10 text-primary">
+                       <AvatarFallback className="bg-gradient-to-br from-primary/15 to-accent/15 text-primary">
                         {request.profile?.display_name?.charAt(0)?.toUpperCase() || <Users className="w-6 h-6" />}
                       </AvatarFallback>
                     </Avatar>
@@ -213,7 +213,7 @@ export default function Social() {
 
         {/* My Friends */}
         <div>
-          <h2 className="text-fluid-xl sm:text-fluid-2xl font-bold text-foreground mb-fluid-md">
+            <h2 className="text-fluid-xl sm:text-fluid-2xl font-black bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent mb-fluid-md">
             My Friends ({connections.length})
           </h2>
           {connections.length === 0 ? (
@@ -232,14 +232,14 @@ export default function Social() {
               renderItem={(connection) => {
                 const friendId = connection.user_id === user?.id ? connection.friend_id : connection.user_id;
                 return (
-                  <div className="bg-card border border-border rounded-xl p-3 sm:p-4 flex items-center justify-between gap-2 sm:gap-3 h-full">
+                   <div className="bg-card/90 backdrop-blur-sm border border-border/60 rounded-xl p-3 sm:p-4 flex items-center justify-between gap-2 sm:gap-3 h-full shadow-card">
                     <button
                       className="flex items-center gap-2 sm:gap-3 text-left flex-1 min-w-0"
                       onClick={() => setSelectedProfileId(friendId)}
                     >
                       <Avatar className="w-9 h-9 sm:w-10 sm:h-10 flex-shrink-0">
                         <AvatarImage src={connection.profile?.avatar_url || undefined} alt={connection.profile?.display_name || "Friend"} />
-                        <AvatarFallback className="bg-primary/10 text-primary text-sm">
+                        <AvatarFallback className="bg-gradient-to-br from-primary/15 to-accent/15 text-primary text-sm">
                           {connection.profile?.display_name?.charAt(0)?.toUpperCase() || <Users className="w-4 h-4 sm:w-5 sm:h-5" />}
                         </AvatarFallback>
                       </Avatar>
@@ -281,7 +281,7 @@ export default function Social() {
 
         {/* Discover People */}
         <div>
-          <h2 className="text-fluid-xl sm:text-fluid-2xl font-bold text-foreground mb-fluid-md">
+          <h2 className="text-fluid-xl sm:text-fluid-2xl font-black bg-gradient-to-r from-foreground to-accent bg-clip-text text-transparent mb-fluid-md">
             Discover People
           </h2>
           <VirtualGrid
@@ -291,11 +291,11 @@ export default function Social() {
             columns={{ mobile: 1, tablet: 2, desktop: 3 }}
             getItemKey={(profile) => profile.id}
             renderItem={(profile) => (
-              <div className="bg-card border border-border rounded-xl p-3 sm:p-4 flex items-center justify-between gap-2 sm:gap-3 h-full">
+              <div className="bg-card/90 backdrop-blur-sm border border-border/60 rounded-xl p-3 sm:p-4 flex items-center justify-between gap-2 sm:gap-3 h-full shadow-card">
                 <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
                   <Avatar className="w-9 h-9 sm:w-10 sm:h-10 flex-shrink-0">
                     <AvatarImage src={profile.avatar_url || undefined} alt={profile.display_name || "User"} />
-                    <AvatarFallback className="bg-accent/10 text-accent text-sm">
+                    <AvatarFallback className="bg-gradient-to-br from-accent/15 to-primary/15 text-accent text-sm">
                       {profile.display_name?.charAt(0)?.toUpperCase() || <Users className="w-4 h-4 sm:w-5 sm:h-5" />}
                     </AvatarFallback>
                   </Avatar>

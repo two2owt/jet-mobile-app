@@ -209,10 +209,12 @@ const Settings = () => {
     return (
       <SettingsLayout>
         <div className="max-w-lg mx-auto px-4 sm:px-6 md:px-8 lg:px-10 py-fluid-lg">
-          <Card className="p-fluid-lg text-center">
-            <Bell className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-fluid-md text-muted-foreground" />
+          <Card className="p-fluid-lg text-center bg-card/90 backdrop-blur-sm shadow-card">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-primary/15 to-accent/15 flex items-center justify-center mx-auto mb-fluid-md ring-1 ring-primary/20">
+              <Bell className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />
+            </div>
             <p className="text-fluid-sm text-muted-foreground mb-fluid-md">Please sign in to access settings</p>
-            <Button onClick={() => navigate("/auth")}>
+            <Button onClick={() => navigate("/auth")} variant="jet">
               Sign In
             </Button>
           </Card>
@@ -225,14 +227,14 @@ const Settings = () => {
     <SettingsLayout>
       <div className="max-w-3xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 py-fluid-lg space-y-fluid-lg">
         {/* Profile Link */}
-        <Card className="p-4 sm:p-5 md:p-6">
+        <Card className="p-4 sm:p-5 md:p-6 bg-card/90 backdrop-blur-sm shadow-card">
           <Button
             onClick={() => navigate("/profile")}
             variant="outline"
             className="w-full h-auto py-4 justify-start"
           >
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/15 to-accent/15 flex items-center justify-center">
                 <User className="w-5 h-5 text-primary" />
               </div>
               <div className="text-left">
@@ -245,7 +247,7 @@ const Settings = () => {
 
         {/* Subscription Section - visible when monetization is enabled OR user is admin */}
         {userId && showSubscriptionSection && (
-          <Card className="p-4 sm:p-5 md:p-6 space-y-4 sm:space-y-6">
+          <Card className="p-4 sm:p-5 md:p-6 space-y-4 sm:space-y-6 bg-card/90 backdrop-blur-sm shadow-card">
             <div className="flex items-start justify-between gap-2">
               <div>
                 <div className="flex items-center gap-2 mb-1 sm:mb-2">
@@ -272,7 +274,7 @@ const Settings = () => {
 
         {/* Personal Preferences Section */}
         {userId && (
-          <Card className="p-4 sm:p-5 md:p-6 space-y-4 sm:space-y-6">
+          <Card className="p-4 sm:p-5 md:p-6 space-y-4 sm:space-y-6 bg-card/90 backdrop-blur-sm shadow-card">
             <div>
               <div className="flex items-center gap-2 mb-1 sm:mb-2">
                 <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
@@ -291,7 +293,7 @@ const Settings = () => {
 
         {/* Privacy Settings Section */}
         {userId && (
-          <Card className="p-4 sm:p-5 md:p-6 space-y-4 sm:space-y-6">
+          <Card className="p-4 sm:p-5 md:p-6 space-y-4 sm:space-y-6 bg-card/90 backdrop-blur-sm shadow-card">
             <div>
               <div className="flex items-center gap-2 mb-1 sm:mb-2">
                 <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
@@ -309,7 +311,7 @@ const Settings = () => {
         )}
 
         {/* Notifications Section */}
-        <Card className="p-4 sm:p-5 md:p-6 space-y-4 sm:space-y-6">
+        <Card className="p-4 sm:p-5 md:p-6 space-y-4 sm:space-y-6 bg-card/90 backdrop-blur-sm shadow-card">
           <div>
             <div className="flex items-center gap-2 mb-1 sm:mb-2">
               <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
@@ -366,7 +368,7 @@ const Settings = () => {
         </Card>
 
         {/* Theme Section */}
-        <Card className="p-4 sm:p-5 md:p-6 space-y-4 sm:space-y-6">
+        <Card className="p-4 sm:p-5 md:p-6 space-y-4 sm:space-y-6 bg-card/90 backdrop-blur-sm shadow-card">
           <div>
             <div className="flex items-center gap-2 mb-1 sm:mb-2">
               <Sun className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
@@ -443,7 +445,7 @@ const Settings = () => {
         </Card>
 
         {/* Location Section */}
-        <Card className="p-4 sm:p-5 md:p-6 space-y-4 sm:space-y-6">
+        <Card className="p-4 sm:p-5 md:p-6 space-y-4 sm:space-y-6 bg-card/90 backdrop-blur-sm shadow-card">
           <div>
             <div className="flex items-center gap-2 mb-1 sm:mb-2">
               <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
@@ -495,7 +497,7 @@ const Settings = () => {
         </Card>
 
         {/* Privacy Info */}
-        <Card className="p-4 sm:p-5 md:p-6 bg-muted">
+        <Card className="p-4 sm:p-5 md:p-6 bg-muted/80 backdrop-blur-sm shadow-card">
           <div className="flex items-start gap-2 sm:gap-3">
             <Radio className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground mt-0.5 flex-shrink-0" />
             <div className="space-y-1 sm:space-y-2 flex-1 min-w-0">
@@ -509,7 +511,7 @@ const Settings = () => {
         </Card>
 
         {/* Support Section */}
-        <Card className="p-4 sm:p-5 md:p-6 space-y-4 sm:space-y-6">
+        <Card className="p-4 sm:p-5 md:p-6 space-y-4 sm:space-y-6 bg-card/90 backdrop-blur-sm shadow-card">
           <div>
             <h2 className="text-base sm:text-lg font-bold text-foreground">Support</h2>
             <p className="text-xs sm:text-sm text-muted-foreground mt-1">
@@ -526,7 +528,7 @@ const Settings = () => {
 
         {/* Danger Zone - Account Deletion */}
         {userId && (
-          <Card className="p-4 sm:p-5 md:p-6 space-y-4 sm:space-y-6 border-destructive/50">
+          <Card className="p-4 sm:p-5 md:p-6 space-y-4 sm:space-y-6 border-destructive/50 bg-card/90 backdrop-blur-sm shadow-card">
             <div>
               <div className="flex items-center gap-2 mb-1 sm:mb-2">
                 <Trash2 className="w-4 h-4 sm:w-5 sm:h-5 text-destructive" />
@@ -549,6 +551,7 @@ const Settings = () => {
           disabled={isSaving}
           className="w-full text-sm sm:text-base"
           size="lg"
+          variant="jet"
         >
           {isSaving ? (
             <>
