@@ -1,4 +1,4 @@
-import { Map, Compass, Bell, Star, Users } from "lucide-react";
+import { MapPinned, Flame, Bell, Heart, Users2 } from "lucide-react";
 import { useCallback } from "react";
 
 type NavItem = "map" | "explore" | "notifications" | "favorites" | "social";
@@ -18,11 +18,11 @@ export const BottomNav = ({ activeTab, onTabChange, notificationCount = 0, onPre
   }, [onPrefetch, activeTab]);
 
   const navItems = [
-    { id: "map" as NavItem, icon: Map, label: "Map" },
-    { id: "explore" as NavItem, icon: Compass, label: "Explore" },
+    { id: "map" as NavItem, icon: MapPinned, label: "Map" },
+    { id: "explore" as NavItem, icon: Flame, label: "Hot" },
     { id: "notifications" as NavItem, icon: Bell, label: "Alerts" },
-    { id: "favorites" as NavItem, icon: Star, label: "Saved" },
-    { id: "social" as NavItem, icon: Users, label: "Friends" },
+    { id: "favorites" as NavItem, icon: Heart, label: "Saved" },
+    { id: "social" as NavItem, icon: Users2, label: "Crew" },
   ];
 
   return (
@@ -132,6 +132,7 @@ export const BottomNav = ({ activeTab, onTabChange, notificationCount = 0, onPre
                       ${isActive ? "scale-105" : "scale-100"}
                     `}
                     strokeWidth={isActive ? 2.5 : 2}
+                    fill={isActive && (item.id === 'favorites') ? 'currentColor' : 'none'}
                     aria-hidden="true"
                   />
                 </div>

@@ -2154,21 +2154,13 @@ export const MapboxHeatmap = ({ onVenueSelect, venues, mapboxToken, selectedCity
         }}
       />
 
-      {/* City Selector with Current Location option - responsive for all devices */}
-      {/* City Selector - CLS fix: Defer render until after initial paint */}
+      {/* Unified Top-Left Controls: Location + Map Style in one compact row */}
       {controlsReady && (
       <div 
-        className="absolute z-10"
+        className="absolute z-10 flex items-center gap-1.5"
         style={{
           top: 'var(--map-safe-top-controls-in-map, var(--map-safe-top-controls, var(--map-safe-top)))',
           left: 'var(--map-ui-inset-left)',
-          // CLS fix: Fixed dimensions prevent layout shift when "Locating..." changes
-          // Increased width to accommodate longer city names
-          width: 'auto',
-          height: 'auto',
-          minWidth: '200px',
-          minHeight: '36px',
-          maxWidth: '280px',
           contain: 'layout style',
         }}
       >
@@ -2211,31 +2203,19 @@ export const MapboxHeatmap = ({ onVenueSelect, venues, mapboxToken, selectedCity
           }}
         >
           <SelectTrigger 
-            className="w-full text-[11px] sm:text-xs md:text-sm lg:text-base h-9 sm:h-10 md:h-11 lg:h-12 px-3 sm:px-3.5 md:px-4 rounded-xl shadow-lg bg-card/95 backdrop-blur-xl border-border"
+            className="text-[11px] sm:text-xs h-8 sm:h-9 px-2.5 sm:px-3 rounded-xl shadow-lg bg-card/95 backdrop-blur-xl border-border"
             aria-label="Select city location"
-            style={{
-              // CLS fix: Reserve stable width to prevent layout shift when "Locating..." changes to city name
-              minWidth: '200px',
-              maxWidth: '280px',
-              contain: 'layout style',
-            }}
+            style={{ minWidth: '140px', maxWidth: '220px', contain: 'layout style' }}
           >
-            <div className="flex items-center gap-2 sm:gap-2.5 md:gap-3 w-full">
-              <MapPin className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 text-primary flex-shrink-0" />
-              <span 
-                className="font-semibold truncate flex-1 text-left"
-                style={{
-                  // CLS fix: Min width ensures stable layout, flex-1 allows growth
-                  minWidth: '140px',
-                  maxWidth: '200px',
-                }}
-              >
+            <div className="flex items-center gap-1.5 w-full">
+              <MapPin className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+              <span className="font-semibold truncate flex-1 text-left" style={{ minWidth: '80px' }}>
                 {isUsingCurrentLocation 
                   ? (detectedLocationName || (detectedCity ? `${detectedCity.name}, ${detectedCity.state}` : "Locating..."))
                   : `${selectedCity.name}, ${selectedCity.state}`}
               </span>
               {isUsingCurrentLocation && (detectedLocationName || detectedCity) && (
-                <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-primary rounded-full animate-pulse flex-shrink-0" />
+                <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse flex-shrink-0" />
               )}
             </div>
           </SelectTrigger>
@@ -2269,49 +2249,31 @@ export const MapboxHeatmap = ({ onVenueSelect, venues, mapboxToken, selectedCity
             })}
           </SelectContent>
         </Select>
-      </div>
-      )}
 
-      {/* Map Controls - Top left below city selector */}
-      {/* CLS fix: Defer render until after initial paint to prevent layout shifts */}
-      {controlsReady && (
-      <div 
-        className="absolute z-10 space-y-2 sm:space-y-2.5 md:space-y-3"
-        style={{
-          top: isMobile 
-            ? 'calc(var(--map-safe-top-controls-in-map, var(--map-safe-top-controls, var(--map-safe-top))) + 3.5rem)'
-            : 'calc(var(--map-safe-top-controls-in-map, var(--map-safe-top-controls, var(--map-safe-top))) + 4rem)',
-          left: 'var(--map-ui-inset-left)',
-          maxWidth: isMobile ? 'calc(50vw - 0.75rem)' : 'var(--map-control-max-width)',
-          contain: 'layout style',
-        }}
-      >
+        {/* Map Style - compact icon button */}
         <Collapsible defaultOpen={false}>
           <CollapsibleTrigger asChild>
             <Button
               variant="secondary"
               size="sm"
-              className="bg-card/95 backdrop-blur-xl border border-border text-[10px] sm:text-xs md:text-sm shadow-lg h-9 sm:h-10 md:h-11 px-2.5 sm:px-3 md:px-4 rounded-xl transition-all duration-200"
-              aria-label="Toggle map style options"
+              className="bg-card/95 backdrop-blur-xl border border-border shadow-lg h-8 sm:h-9 w-8 sm:w-9 p-0 rounded-xl"
+              aria-label="Map style options"
             >
-              <Layers className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-1.5" aria-hidden="true" />
-              <span>Map Style</span>
+              <Layers className="w-3.5 h-3.5 sm:w-4 sm:h-4" aria-hidden="true" />
             </Button>
           </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2 sm:mt-2.5 overflow-hidden data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
-            <div className="bg-card/95 backdrop-blur-xl rounded-xl border border-border p-2 sm:p-2.5 md:p-3 shadow-lg space-y-2.5 sm:space-y-3">
-              {/* Map Style Options */}
-              <div className="space-y-1.5" role="group" aria-label="Map base style options">
-                <span id="base-style-label" className="text-[9px] sm:text-[10px] md:text-xs text-muted-foreground font-medium uppercase tracking-wider">Base Style</span>
-                <div className="grid grid-cols-4 gap-1.5 sm:gap-2" role="radiogroup" aria-labelledby="base-style-label">
+          <CollapsibleContent className="absolute top-full left-0 mt-1.5 z-20 overflow-hidden data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
+            <div className="bg-card/95 backdrop-blur-xl rounded-xl border border-border p-2 shadow-lg space-y-2" style={{ minWidth: '200px' }}>
+              <div className="space-y-1.5" role="group" aria-label="Map base style">
+                <span className="text-[9px] text-muted-foreground font-medium uppercase tracking-wider">Style</span>
+                <div className="grid grid-cols-4 gap-1" role="radiogroup">
                   {(['light', 'dark', 'streets', 'satellite'] as const).map((style) => (
                     <Button
                       key={style}
                       onClick={() => { triggerHaptic('light'); setMapStyle(style); }}
                       variant={mapStyle === style ? "default" : "outline"}
                       size="sm"
-                      className="h-7 sm:h-8 md:h-9 text-[9px] sm:text-[10px] md:text-xs px-1.5 sm:px-2 capitalize"
-                      aria-label={`Set map style to ${style}`}
+                      className="h-7 text-[9px] px-1.5 capitalize"
                       aria-pressed={mapStyle === style}
                     >
                       {style}
@@ -2319,17 +2281,14 @@ export const MapboxHeatmap = ({ onVenueSelect, venues, mapboxToken, selectedCity
                   ))}
                 </div>
               </div>
-              
-              {/* 3D Terrain Toggle */}
               <Button
                 onClick={() => { triggerHaptic('medium'); setShow3DTerrain(!show3DTerrain); }}
                 variant={show3DTerrain ? "default" : "outline"}
                 size="sm"
-                className="w-full h-8 sm:h-9 md:h-10 text-[10px] sm:text-xs md:text-sm"
-                aria-label={show3DTerrain ? "Disable 3D terrain view" : "Enable 3D terrain view"}
+                className="w-full h-7 text-[10px]"
                 aria-pressed={show3DTerrain}
               >
-                {show3DTerrain ? "Disable" : "Enable"} 3D Terrain
+                {show3DTerrain ? "3D On" : "3D Off"}
               </Button>
             </div>
           </CollapsibleContent>
@@ -2337,274 +2296,38 @@ export const MapboxHeatmap = ({ onVenueSelect, venues, mapboxToken, selectedCity
       </div>
       )}
 
-      {/* Layer Toggle Controls - Always visible on map */}
+      {/* Layers Panel - Unified FAB + expandable panel */}
       {controlsReady && (
       <div 
-        className="fixed z-[60] flex flex-col justify-end gap-2 sm:gap-2.5 scrollbar-hide"
+        className="fixed z-[60]"
         style={{
-          // Position from bottom, above the bottom nav
           bottom: 'var(--map-fixed-bottom)',
           right: 'var(--map-ui-inset-right)',
-          // CLS fix: Fixed width prevents layout shifts when controls render
-          width: '140px',
-          minWidth: '140px',
-          maxWidth: '140px',
-          // Constrain height to stay within safe zone (between header and bottom nav)
-          maxHeight: 'calc(100dvh - var(--map-safe-top) - var(--map-fixed-bottom) - 1rem)',
-          overflowY: 'auto',
-          overflowX: 'hidden',
-          // Layout containment prevents shifts
           contain: 'layout style',
-          // Always visible - toggles should stay accessible regardless of venue selection
-          opacity: 1,
-          pointerEvents: 'auto',
           transform: 'translateZ(0)',
         }}
       >
-          {/* Heat Filter Controls - Expands above buttons */}
-          <div 
-            className={`overflow-hidden transition-all duration-200 ${
-              showDensityLayer 
-                ? 'max-h-[240px]' 
-                : 'max-h-0'
-            }`}
-            style={{ contain: 'layout style' }}
-          >
-            <div className="bg-card/95 backdrop-blur-xl rounded-xl border border-border p-2 shadow-lg space-y-2 mb-2">
-              {/* Time-lapse toggle */}
-              <Button
-                onClick={() => {
-                  triggerHaptic('medium');
-                  const newMode = !timelapseMode;
-                  setTimelapseMode(newMode);
-                  if (newMode) {
-                    timelapse.loadHourlyData();
-                  }
-                }}
-                variant={timelapseMode ? "default" : "outline"}
-                size="sm"
-                className="w-full h-8 text-[10px] font-semibold transition-all duration-200 flex items-center justify-center gap-1.5"
+        {/* Expanded panel - slides up from FAB */}
+        <div 
+          className={`overflow-hidden transition-all duration-300 ease-out ${
+            !controlsCollapsed ? 'max-h-[600px] opacity-100 mb-2' : 'max-h-0 opacity-0'
+          }`}
+          style={{ width: '160px', contain: 'layout style' }}
+        >
+          <div className="bg-card/95 backdrop-blur-xl rounded-xl border border-border shadow-xl p-2.5 space-y-2">
+            {/* Panel header */}
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Layers</span>
+              <button 
+                onClick={() => { triggerHaptic('light'); setControlsCollapsed(true); }}
+                className="w-5 h-5 flex items-center justify-center rounded-md hover:bg-secondary/50 transition-colors"
               >
-                <Clock className="w-3 h-3 flex-shrink-0" />
-                <span>{timelapseMode ? "Time-lapse On" : "Time-lapse"}</span>
-              </Button>
-
-              {/* Time-lapse controls when active */}
-              <div 
-                className={`overflow-hidden transition-all duration-300 ease-out ${
-                  timelapseMode 
-                    ? 'max-h-[200px] opacity-100' 
-                    : 'max-h-0 opacity-0'
-                }`}
-              >
-                <div className="space-y-2 pt-1 border-t border-border/50 animate-fade-in">
-                  {/* Play controls */}
-                  <div className="flex items-center justify-between gap-1">
-                    <Button
-                      onClick={() => { triggerHaptic('light'); timelapse.stepBackward(); }}
-                      variant="outline"
-                      size="sm"
-                      className="h-7 w-7 p-0 transition-transform duration-150 active:scale-90"
-                      disabled={timelapse.isPlaying}
-                      aria-label="Step backward one hour"
-                    >
-                      <SkipBack className="w-3 h-3" />
-                    </Button>
-                    <Button
-                      onClick={() => { triggerHaptic('medium'); timelapse.isPlaying ? timelapse.pause() : timelapse.play(); }}
-                      variant={timelapse.isPlaying ? "default" : "outline"}
-                      size="sm"
-                      className="h-7 flex-1 transition-all duration-200"
-                      aria-label={timelapse.isPlaying ? "Pause time-lapse" : "Play time-lapse"}
-                    >
-                      {timelapse.isPlaying ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
-                    </Button>
-                    <Button
-                      onClick={() => { triggerHaptic('light'); timelapse.stepForward(); }}
-                      variant="outline"
-                      size="sm"
-                      className="h-7 w-7 p-0 transition-transform duration-150 active:scale-90"
-                      disabled={timelapse.isPlaying}
-                      aria-label="Step forward one hour"
-                    >
-                      <SkipForward className="w-3 h-3" />
-                    </Button>
-                  </div>
-
-                  {/* Current hour display */}
-                  <div className="text-center text-[10px] font-semibold text-primary transition-all duration-200">
-                    {timelapse.formatHour(timelapse.currentHour)}
-                  </div>
-
-                  {/* Hour slider */}
-                  <Slider
-                    value={[timelapse.currentHour]}
-                    onValueChange={([v]) => timelapse.setHour(v)}
-                    min={0}
-                    max={23}
-                    step={1}
-                    className="w-full"
-                    disabled={timelapse.isPlaying}
-                    aria-label={`Select hour of day: ${timelapse.formatHour(timelapse.currentHour)}`}
-                  />
-
-                  {/* Speed control */}
-                  <div className="flex gap-1" role="group" aria-label="Time-lapse playback speed">
-                    {[2, 1, 0.5].map((speed, i) => (
-                      <Button
-                        key={speed}
-                        onClick={() => timelapse.setSpeed(speed)}
-                        variant={timelapse.speed === speed ? "default" : "outline"}
-                        size="sm"
-                        className="h-6 flex-1 text-[9px] px-1 transition-all duration-200"
-                        style={{ animationDelay: `${i * 50}ms` }}
-                        aria-label={`Set playback speed to ${speed === 2 ? '0.5x' : speed === 1 ? '1x' : '2x'}`}
-                        aria-pressed={timelapse.speed === speed}
-                      >
-                        {speed === 2 ? '0.5x' : speed === 1 ? '1x' : '2x'}
-                      </Button>
-                    ))}
-                  </div>
-
-                  {timelapse.loading && (
-                    <div className="flex items-center justify-center gap-1 py-1 animate-fade-in">
-                      <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                      <span className="text-[9px] text-muted-foreground">Loading...</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Regular filters when time-lapse is off */}
-              <div 
-                className={`overflow-hidden transition-all duration-300 ease-out ${
-                  !timelapseMode 
-                    ? 'max-h-[200px] opacity-100' 
-                    : 'max-h-0 opacity-0'
-                }`}
-              >
-                <div className="space-y-2 animate-fade-in">
-                  <Select value={timeFilter} onValueChange={(v: any) => setTimeFilter(v)}>
-                    <SelectTrigger className="h-8 text-[10px] bg-background/80 transition-all duration-200" aria-label="Filter heatmap by time period">
-                      <SelectValue placeholder="Time" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Time</SelectItem>
-                      <SelectItem value="today">Today</SelectItem>
-                      <SelectItem value="this_week">This Week</SelectItem>
-                      <SelectItem value="this_hour">This Hour</SelectItem>
-                    </SelectContent>
-                  </Select>
-
-                  <Select value={hourFilter?.toString() || "all"} onValueChange={(v) => setHourFilter(v === "all" ? undefined : parseInt(v))}>
-                    <SelectTrigger className="h-8 text-[10px] bg-background/80 transition-all duration-200" aria-label="Filter heatmap by hour of day">
-                      <SelectValue placeholder="Hour" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Hours</SelectItem>
-                      {Array.from({ length: 24 }, (_, i) => (
-                        <SelectItem key={i} value={i.toString()}>{i}:00</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-
-                  <Select value={dayFilter?.toString() || "all"} onValueChange={(v) => setDayFilter(v === "all" ? undefined : parseInt(v))}>
-                    <SelectTrigger className="h-8 text-[10px] bg-background/80 transition-all duration-200" aria-label="Filter heatmap by day of week">
-                      <SelectValue placeholder="Day" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Days</SelectItem>
-                      <SelectItem value="0">Sun</SelectItem>
-                      <SelectItem value="1">Mon</SelectItem>
-                      <SelectItem value="2">Tue</SelectItem>
-                      <SelectItem value="3">Wed</SelectItem>
-                      <SelectItem value="4">Thu</SelectItem>
-                      <SelectItem value="5">Fri</SelectItem>
-                      <SelectItem value="6">Sat</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
+                <X className="w-3 h-3 text-muted-foreground" />
+              </button>
             </div>
-          </div>
 
-          {/* Path Filter Controls - Expands above buttons */}
-          <div 
-            className={`overflow-hidden transition-all duration-200 ${
-              showMovementPaths 
-                ? 'max-h-[200px]' 
-                : 'max-h-0'
-            }`}
-            style={{ contain: 'layout style' }}
-          >
-            <div className="bg-card/95 backdrop-blur-xl rounded-xl border border-border p-2.5 shadow-lg space-y-2.5 mb-2">
-              <div className="flex items-center justify-between text-xs font-semibold text-muted-foreground">
-                <span>Flow Filters</span>
-                {pathsLoading && (
-                  <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                )}
-              </div>
-
-              {/* Error UI */}
-              {pathsError && (
-                <div className="flex items-center gap-2 p-2 bg-destructive/10 rounded-lg text-xs">
-                  <AlertCircle className="w-3.5 h-3.5 text-destructive flex-shrink-0" />
-                  <span className="text-destructive truncate">Load failed</span>
-                  <Button onClick={refreshPaths} variant="ghost" size="sm" className="h-6 text-xs px-2 ml-auto">
-                    Retry
-                  </Button>
-                </div>
-              )}
-
-              {/* Time filter */}
-              <Select value={pathTimeFilter} onValueChange={(v: any) => setPathTimeFilter(v)}>
-                <SelectTrigger className="h-8 text-[10px] bg-background/80 transition-all duration-200" aria-label="Filter paths by time period">
-                  <SelectValue placeholder="Time" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Time</SelectItem>
-                  <SelectItem value="today">Today</SelectItem>
-                  <SelectItem value="this_week">This Week</SelectItem>
-                  <SelectItem value="this_hour">This Hour</SelectItem>
-                </SelectContent>
-              </Select>
-
-              {/* Frequency slider */}
-              <div className="space-y-1">
-                <div className="flex items-center justify-between text-[10px]">
-                  <label htmlFor="path-frequency-slider" className="text-muted-foreground">Min. Frequency</label>
-                  <span className="font-semibold text-primary" aria-live="polite">{minPathFrequency}</span>
-                </div>
-                <input
-                  id="path-frequency-slider"
-                  type="range"
-                  min="1"
-                  max="10"
-                  value={minPathFrequency}
-                  onChange={(e) => setMinPathFrequency(parseInt(e.target.value))}
-                  className="path-flow-slider w-full"
-                  aria-label={`Minimum path frequency: ${minPathFrequency}`}
-                  aria-valuemin={1}
-                  aria-valuemax={10}
-                  aria-valuenow={minPathFrequency}
-                />
-              </div>
-
-              {/* Stats */}
-              {pathData && (
-                <div className="flex items-center gap-2 text-[9px] text-muted-foreground pt-1 border-t border-border/30">
-                  <span>{pathData.stats.total_paths} paths</span>
-                  <span>•</span>
-                  <span>{pathData.stats.unique_users} users</span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Toggle Buttons - Always at the bottom */}
-          <div className="flex flex-col gap-2">
-            {/* Heat Button */}
-            <Button
+            {/* Heat toggle row */}
+            <button
               onClick={() => {
                 triggerHaptic('medium');
                 const newState = !showDensityLayer;
@@ -2615,56 +2338,188 @@ export const MapboxHeatmap = ({ onVenueSelect, venues, mapboxToken, selectedCity
                   setDayFilter(undefined);
                 }
               }}
-              variant={showDensityLayer ? "default" : "outline"}
-              size="sm"
-              className={`w-full h-12 text-sm font-semibold rounded-xl shadow-lg transition-all duration-200 active:scale-95 touch-manipulation ${
+              className={`w-full flex items-center gap-2 px-2 py-2 rounded-lg text-[11px] font-semibold transition-all duration-200 active:scale-[0.97] ${
                 showDensityLayer 
-                  ? 'bg-primary text-primary-foreground shadow-primary/30' 
-                  : 'bg-card/95 backdrop-blur-xl text-foreground border-border'
+                  ? 'bg-primary/15 text-primary border border-primary/30' 
+                  : 'bg-secondary/30 text-muted-foreground hover:bg-secondary/50'
               }`}
             >
-              <Layers className="w-4.5 h-4.5 mr-2" />
-              {showDensityLayer ? "Heat On" : "Heat Off"}
-            </Button>
+              <div className={`w-6 h-6 rounded-md flex items-center justify-center ${showDensityLayer ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}>
+                <Layers className="w-3.5 h-3.5" />
+              </div>
+              <span>Heatmap</span>
+              <div className={`ml-auto w-2 h-2 rounded-full ${showDensityLayer ? 'bg-primary' : 'bg-muted-foreground/30'}`} />
+            </button>
 
-            {/* Paths Button */}
-            <Button
+            {/* Heat filters - shown when heat is on */}
+            <div className={`overflow-hidden transition-all duration-200 ${showDensityLayer ? 'max-h-[240px]' : 'max-h-0'}`}>
+              <div className="space-y-2 pl-1">
+                {/* Time-lapse toggle */}
+                <Button
+                  onClick={() => {
+                    triggerHaptic('medium');
+                    const newMode = !timelapseMode;
+                    setTimelapseMode(newMode);
+                    if (newMode) timelapse.loadHourlyData();
+                  }}
+                  variant={timelapseMode ? "default" : "outline"}
+                  size="sm"
+                  className="w-full h-7 text-[10px] font-semibold"
+                >
+                  <Clock className="w-3 h-3 mr-1 flex-shrink-0" />
+                  {timelapseMode ? "Time-lapse On" : "Time-lapse"}
+                </Button>
+
+                {/* Time-lapse controls */}
+                {timelapseMode && (
+                  <div className="space-y-1.5 pt-1 border-t border-border/50">
+                    <div className="flex items-center justify-between gap-1">
+                      <Button onClick={() => { triggerHaptic('light'); timelapse.stepBackward(); }} variant="outline" size="sm" className="h-6 w-6 p-0" disabled={timelapse.isPlaying}><SkipBack className="w-3 h-3" /></Button>
+                      <Button onClick={() => { triggerHaptic('medium'); timelapse.isPlaying ? timelapse.pause() : timelapse.play(); }} variant={timelapse.isPlaying ? "default" : "outline"} size="sm" className="h-6 flex-1">{timelapse.isPlaying ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}</Button>
+                      <Button onClick={() => { triggerHaptic('light'); timelapse.stepForward(); }} variant="outline" size="sm" className="h-6 w-6 p-0" disabled={timelapse.isPlaying}><SkipForward className="w-3 h-3" /></Button>
+                    </div>
+                    <div className="text-center text-[10px] font-semibold text-primary">{timelapse.formatHour(timelapse.currentHour)}</div>
+                    <Slider value={[timelapse.currentHour]} onValueChange={([v]) => timelapse.setHour(v)} min={0} max={23} step={1} className="w-full" disabled={timelapse.isPlaying} />
+                    <div className="flex gap-1">
+                      {[2, 1, 0.5].map((speed) => (
+                        <Button key={speed} onClick={() => timelapse.setSpeed(speed)} variant={timelapse.speed === speed ? "default" : "outline"} size="sm" className="h-5 flex-1 text-[9px] px-1">{speed === 2 ? '0.5x' : speed === 1 ? '1x' : '2x'}</Button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Regular filters */}
+                {!timelapseMode && (
+                  <div className="space-y-1.5">
+                    <Select value={timeFilter} onValueChange={(v: any) => setTimeFilter(v)}>
+                      <SelectTrigger className="h-7 text-[10px] bg-background/80"><SelectValue placeholder="Time" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Time</SelectItem>
+                        <SelectItem value="today">Today</SelectItem>
+                        <SelectItem value="this_week">This Week</SelectItem>
+                        <SelectItem value="this_hour">This Hour</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Select value={dayFilter?.toString() || "all"} onValueChange={(v) => setDayFilter(v === "all" ? undefined : parseInt(v))}>
+                      <SelectTrigger className="h-7 text-[10px] bg-background/80"><SelectValue placeholder="Day" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Days</SelectItem>
+                        {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map((d, i) => (
+                          <SelectItem key={i} value={i.toString()}>{d}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="h-px bg-border/50" />
+
+            {/* Paths toggle row */}
+            <button
               onClick={() => { triggerHaptic('medium'); setShowMovementPaths(!showMovementPaths); }}
-              variant={showMovementPaths ? "default" : "outline"}
-              size="sm"
-              className={`w-full h-12 text-sm font-semibold rounded-xl shadow-lg transition-all duration-200 active:scale-95 touch-manipulation ${
+              className={`w-full flex items-center gap-2 px-2 py-2 rounded-lg text-[11px] font-semibold transition-all duration-200 active:scale-[0.97] ${
                 showMovementPaths 
-                  ? 'bg-primary text-primary-foreground shadow-primary/30' 
-                  : 'bg-card/95 backdrop-blur-xl text-foreground border-border'
+                  ? 'bg-primary/15 text-primary border border-primary/30' 
+                  : 'bg-secondary/30 text-muted-foreground hover:bg-secondary/50'
               }`}
             >
-              <Route className="w-4.5 h-4.5 mr-2" />
-              {showMovementPaths ? "Paths On" : "Paths Off"}
+              <div className={`w-6 h-6 rounded-md flex items-center justify-center ${showMovementPaths ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}>
+                <Route className="w-3.5 h-3.5" />
+              </div>
+              <span>Flow Paths</span>
+              <div className={`ml-auto w-2 h-2 rounded-full ${showMovementPaths ? 'bg-primary' : 'bg-muted-foreground/30'}`} />
+            </button>
+
+            {/* Path filters */}
+            <div className={`overflow-hidden transition-all duration-200 ${showMovementPaths ? 'max-h-[200px]' : 'max-h-0'}`}>
+              <div className="space-y-1.5 pl-1">
+                {pathsError && (
+                  <div className="flex items-center gap-1.5 p-1.5 bg-destructive/10 rounded-lg text-[10px]">
+                    <AlertCircle className="w-3 h-3 text-destructive flex-shrink-0" />
+                    <span className="text-destructive">Failed</span>
+                    <Button onClick={refreshPaths} variant="ghost" size="sm" className="h-5 text-[9px] px-1.5 ml-auto">Retry</Button>
+                  </div>
+                )}
+                <Select value={pathTimeFilter} onValueChange={(v: any) => setPathTimeFilter(v)}>
+                  <SelectTrigger className="h-7 text-[10px] bg-background/80"><SelectValue placeholder="Time" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Time</SelectItem>
+                    <SelectItem value="today">Today</SelectItem>
+                    <SelectItem value="this_week">This Week</SelectItem>
+                    <SelectItem value="this_hour">This Hour</SelectItem>
+                  </SelectContent>
+                </Select>
+                <div className="space-y-0.5">
+                  <div className="flex items-center justify-between text-[9px]">
+                    <span className="text-muted-foreground">Min. Frequency</span>
+                    <span className="font-semibold text-primary">{minPathFrequency}</span>
+                  </div>
+                  <input type="range" min="1" max="10" value={minPathFrequency} onChange={(e) => setMinPathFrequency(parseInt(e.target.value))} className="path-flow-slider w-full" />
+                </div>
+                {pathData && (
+                  <div className="flex items-center gap-1.5 text-[9px] text-muted-foreground pt-1 border-t border-border/30">
+                    <span>{pathData.stats.total_paths} paths</span>
+                    <span>•</span>
+                    <span>{pathData.stats.unique_users} users</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Both toggle */}
+            <Button
+              onClick={() => {
+                triggerHaptic('heavy');
+                const bothOn = showDensityLayer && showMovementPaths;
+                setShowDensityLayer(!bothOn);
+                setShowMovementPaths(!bothOn);
+                if (!bothOn) {
+                  setTimeFilter('all');
+                  setHourFilter(undefined);
+                  setDayFilter(undefined);
+                }
+              }}
+              variant={(showDensityLayer && showMovementPaths) ? "default" : "outline"}
+              size="sm"
+              className="w-full h-7 text-[10px] font-semibold"
+            >
+              <TrendingUp className="w-3 h-3 mr-1" />
+              {(showDensityLayer && showMovementPaths) ? "All On" : "Show Both"}
             </Button>
           </div>
+        </div>
+
+        {/* Layers FAB */}
+        <button
+          onClick={() => { triggerHaptic('light'); setControlsCollapsed(!controlsCollapsed); }}
+          className={`flex items-center justify-center rounded-xl shadow-xl transition-all duration-200 active:scale-95 touch-manipulation ${
+            (showDensityLayer || showMovementPaths)
+              ? 'bg-primary text-primary-foreground shadow-primary/40'
+              : 'bg-card/95 backdrop-blur-xl text-foreground border border-border'
+          }`}
+          style={{ 
+            width: '44px', 
+            height: '44px',
+            marginLeft: 'auto',
+          }}
+          aria-label={controlsCollapsed ? "Open layers panel" : "Close layers panel"}
+        >
+          {controlsCollapsed ? (
+            <Layers className="w-5 h-5" />
+          ) : (
+            <X className="w-5 h-5" />
+          )}
+          {/* Active indicator dot */}
+          {(showDensityLayer || showMovementPaths) && controlsCollapsed && (
+            <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-accent rounded-full border-2 border-card" />
+          )}
+        </button>
       </div>
       )}
 
-      {/* Desktop Controls Toggle Button */}
-      {!isMobile && (
-        <button
-          onClick={() => { triggerHaptic('light'); setControlsCollapsed(!controlsCollapsed); }}
-          className="absolute z-30 bg-card backdrop-blur-xl rounded-full p-2.5 border border-border shadow-lg transition-all duration-300 hover:bg-card/90 active:scale-95 min-w-[44px] min-h-[44px] flex items-center justify-center touch-manipulation"
-          style={{
-            bottom: 'var(--map-fixed-bottom)',
-            right: controlsCollapsed 
-              ? 'var(--map-ui-inset-right)'
-              : 'calc(var(--map-ui-inset-right) + var(--map-control-max-width) + 0.5rem)',
-          }}
-          aria-label={controlsCollapsed ? "Show map controls" : "Hide map controls"}
-        >
-          {controlsCollapsed ? (
-            <PanelRightOpen className="w-5 h-5 text-foreground" />
-          ) : (
-            <PanelRightClose className="w-5 h-5 text-foreground" />
-          )}
-        </button>
-      )}
 
 
       {/* Statistics Panel - Shows active data counts */}
