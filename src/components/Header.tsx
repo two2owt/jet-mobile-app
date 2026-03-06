@@ -1,11 +1,12 @@
 import { useState, useEffect, lazy, Suspense } from "react";
-import { Search, Sparkles } from "lucide-react";
+import { Search, Sparkles, X } from "lucide-react";
 import { Input } from "./ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useSearchHistory } from "@/hooks/useSearchHistory";
 import { useHeaderContext } from "@/contexts/HeaderContext";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Lazy-load SearchResults - only needed when user starts typing
 const SearchResults = lazy(() => import("./SearchResults").then(m => ({ default: m.SearchResults })));
@@ -23,8 +24,10 @@ export const Header = () => {
   } = useHeaderContext();
 
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const [searchQuery, setSearchQuery] = useState("");
   const [showResults, setShowResults] = useState(false);
+  const [searchExpanded, setSearchExpanded] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [displayName, setDisplayName] = useState<string>("JT");
   const [userId, setUserId] = useState<string | undefined>(undefined);
@@ -72,6 +75,16 @@ export const Header = () => {
     setShowResults(false);
   };
 
+  const handleCollapseSearch = () => {
+    setSearchExpanded(false);
+    setSearchQuery("");
+    setShowResults(false);
+  };
+
+  // On mobile, show search icon that expands; on desktop, always show search bar
+  const showSearchBar = !hideSearch && (!isMobile || searchExpanded);
+  const showSearchIcon = !hideSearch && isMobile && !searchExpanded;
+
   return (
     <header 
       className="fixed top-0 left-0 right-0 z-[60] text-foreground"
@@ -110,7 +123,8 @@ export const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 h-full flex items-center" style={{ display: 'flex', alignItems: 'center', height: '100%', paddingLeft: '1rem', paddingRight: '1rem', overflow: 'hidden' }}>
         <div className="flex items-center gap-fluid-sm sm:gap-fluid-md w-full" style={{ display: 'flex', flexWrap: 'nowrap', alignItems: 'center', width: '100%', gap: '0.5rem', overflow: 'hidden' }}>
           
-          {/* Logo with enhanced styling */}
+          {/* Logo - hidden when search is expanded on mobile */}
+          {!(isMobile && searchExpanded) && (
           <a 
             href="/" 
             className="group flex items-center gap-1.5 flex-shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg px-1 -ml-1"
@@ -131,12 +145,24 @@ export const Header = () => {
               JET
             </h1>
           </a>
+          )}
           
-          {/* Enhanced search bar */}
-          {!hideSearch && (
+          {/* Search icon button (mobile collapsed) */}
+          {showSearchIcon && (
+            <button
+              onClick={() => setSearchExpanded(true)}
+              className="flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-xl bg-secondary/50 hover:bg-secondary/70 transition-colors"
+              aria-label="Open search"
+            >
+              <Search className="w-4 h-4 text-muted-foreground" />
+            </button>
+          )}
+
+          {/* Search bar (always on desktop, expanded on mobile) */}
+          {showSearchBar && (
           <div 
             className="relative flex-1 max-w-xs sm:max-w-sm"
-            style={{ position: 'relative', flex: '1 1 0%', maxWidth: '20rem', minWidth: '120px' }}
+            style={{ position: 'relative', flex: '1 1 0%', maxWidth: isMobile ? '100%' : '20rem', minWidth: '120px' }}
           >
             <div 
               className="absolute left-3 top-1/2 -translate-y-1/2 z-10 pointer-events-none"
@@ -152,10 +178,22 @@ export const Header = () => {
               onFocus={() => searchQuery.trim() && setShowResults(true)} 
               maxLength={100} 
               aria-label="Search venues and deals" 
-              className="w-full pl-9 pr-3 h-9 sm:h-10 rounded-xl bg-secondary/50 border-primary/10 hover:bg-secondary/70 hover:border-primary/20 focus:bg-secondary/80 focus:border-primary/40 focus:ring-1 focus:ring-primary/30 transition-all duration-200 text-sm placeholder:text-muted-foreground/60 shadow-sm" 
+              autoFocus={isMobile && searchExpanded}
+              className="w-full pl-9 pr-9 h-9 sm:h-10 rounded-xl bg-secondary/50 border-primary/10 hover:bg-secondary/70 hover:border-primary/20 focus:bg-secondary/80 focus:border-primary/40 focus:ring-1 focus:ring-primary/30 transition-all duration-200 text-sm placeholder:text-muted-foreground/60 shadow-sm" 
               style={{ width: '100%', paddingLeft: '2.25rem', height: '36px', boxSizing: 'border-box' }}
             />
             
+            {/* Close button (mobile only) */}
+            {isMobile && searchExpanded && (
+              <button
+                onClick={handleCollapseSearch}
+                className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-6 h-6 flex items-center justify-center rounded-md hover:bg-secondary/50 transition-colors"
+                aria-label="Close search"
+              >
+                <X className="w-3.5 h-3.5 text-muted-foreground" />
+              </button>
+            )}
+
             {showResults && (
               <Suspense fallback={null}>
                 <SearchResults 
