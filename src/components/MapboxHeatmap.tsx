@@ -2296,6 +2296,7 @@ export const MapboxHeatmap = ({ onVenueSelect, venues, mapboxToken, selectedCity
           </CollapsibleContent>
         </Collapsible>
       </div>
+      )}
 
       {/* Layer Toggle Controls - Always visible on map */}
       {controlsReady && (
