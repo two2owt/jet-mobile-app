@@ -2528,9 +2528,7 @@ export const MapboxHeatmap = ({ onVenueSelect, venues, mapboxToken, selectedCity
         <div 
           className={`${isMobile ? 'fixed' : 'absolute'} bg-card/95 backdrop-blur-xl rounded-xl border border-border z-30 shadow-lg px-3 py-2`}
           style={{
-            top: isMobile
-              ? 'calc(var(--map-safe-top) + 1rem)'
-              : 'calc(var(--map-safe-top-in-map, var(--map-safe-top)) + 1rem)',
+            top: 'calc(var(--map-safe-top-controls-in-map, var(--map-safe-top-controls)) + 1rem)',
             right: 'var(--map-ui-inset-right)',
             minWidth: '140px',
             // Use opacity-only transition to avoid CLS
