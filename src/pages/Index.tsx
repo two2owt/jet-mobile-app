@@ -445,12 +445,12 @@ const Index = () => {
         <OfflineBanner />
       </Suspense>
 
-      {/* Main Content Area - For non-map tabs only */}
+      {/* Main Content Area - For non-map tabs, overlaid on map background */}
       {activeTab !== "map" && (
         <main 
           role="main"
           id="main-content"
-          className="page-fade-in page-container max-w-7xl mx-auto"
+          className="page-fade-in page-container max-w-7xl mx-auto bg-background/85 backdrop-blur-md"
           style={{ 
             /* Position below the fixed header */
             marginTop: 'var(--header-total-height)',
