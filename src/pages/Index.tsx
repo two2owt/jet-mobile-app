@@ -333,14 +333,15 @@ const Index = () => {
 
   return (
     <div 
-      className="relative w-full h-full"
+      className="relative w-full"
       style={{
-        flex: '1 1 0%',
-        minHeight: 0,
+        /* Fill the entire viewport height minus nothing — 
+           the map goes full-screen behind the fixed header & bottom nav */
+        height: '100dvh',
+        minHeight: '100dvh',
+        maxHeight: '100dvh',
         overflow: 'hidden',
-        // Reserve space for fixed header at top
-        paddingTop: 'var(--header-total-height)',
-        // Create stacking context for overlay architecture
+        /* Create stacking context for overlay architecture */
         isolation: 'isolate',
       }}
     >
@@ -349,13 +350,10 @@ const Index = () => {
         <div 
           className="absolute inset-0 w-full h-full"
           style={{
-            // Map is the base layer - full viewport behind header/footer
+            /* Map fills entire viewport — sits behind fixed header & bottom nav */
             zIndex: 0,
             contain: 'strict',
             transform: 'translateZ(0)',
-            // Offset for the header padding on parent
-            top: 'calc(-1 * var(--header-total-height))',
-            height: 'calc(100% + var(--header-total-height))',
           }}
         >
           {/* Error state - only show if there's a definite error */}
