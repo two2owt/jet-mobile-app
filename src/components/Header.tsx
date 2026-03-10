@@ -224,7 +224,7 @@ export const Header = () => {
             
             <Avatar className="relative w-full h-full ring-2 ring-primary/30 group-hover:ring-primary/60 transition-all duration-300 shadow-glow">
               <AvatarImage src={avatarUrl || ""} alt="Your profile picture" className="object-cover" />
-              <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground font-black text-sm">
+              <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground font-extrabold text-sm">
                 {displayName.substring(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
