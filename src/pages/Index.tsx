@@ -350,9 +350,7 @@ const Index = () => {
         <div 
           className="absolute inset-0 w-full h-full"
           style={{
-            /* Map fills entire viewport — sits behind fixed header & bottom nav */
             zIndex: 0,
-            contain: 'strict',
             transform: 'translateZ(0)',
           }}
         >
