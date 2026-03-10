@@ -213,7 +213,7 @@ export default function Social() {
 
         {/* My Friends */}
         <div>
-            <h2 className="text-fluid-xl sm:text-fluid-2xl font-black bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent mb-fluid-md">
+            <h2 className="text-fluid-xl sm:text-fluid-2xl font-extrabold bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent mb-fluid-md">
             My Friends ({connections.length})
           </h2>
           {connections.length === 0 ? (
