@@ -345,15 +345,14 @@ const Index = () => {
         isolation: 'isolate',
       }}
     >
-      {/* FULL-SCREEN MAP LAYER - renders behind header/footer when on map tab */}
-      {activeTab === "map" && (
-        <div 
-          className="absolute inset-0 w-full h-full"
-          style={{
-            zIndex: 0,
-            transform: 'translateZ(0)',
-          }}
-        >
+      {/* FULL-SCREEN MAP LAYER - always rendered as page background */}
+      <div 
+        className="absolute inset-0 w-full h-full"
+        style={{
+          zIndex: 0,
+          transform: 'translateZ(0)',
+        }}
+      >
           {/* Error state - only show if there's a definite error */}
           {mapboxError && !mapboxLoading && (
             <div 
