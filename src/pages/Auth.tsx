@@ -624,7 +624,7 @@ const Auth = () => {
             {!isForgotPassword && !isSignUp && (
               <button
                 onClick={() => setIsForgotPassword(true)}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors block w-full"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors block w-full min-h-[44px] flex items-center justify-center touch-manipulation"
               >
                 Forgot password?
               </button>
