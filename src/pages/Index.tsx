@@ -335,11 +335,9 @@ const Index = () => {
     <div 
       className="relative w-full"
       style={{
-        /* Fill the entire viewport height minus nothing — 
-           the map goes full-screen behind the fixed header & bottom nav */
-        height: '100dvh',
-        minHeight: '100dvh',
-        maxHeight: '100dvh',
+        /* Fill remaining space in the flex column after header spacer */
+        flex: '1 1 0%',
+        minHeight: 0,
         overflow: 'hidden',
         /* Create stacking context for overlay architecture */
         isolation: 'isolate',
