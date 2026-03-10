@@ -2,28 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 
- * Force font-display: swap for all Kanit font weights
- * This prevents FOIT (Flash of Invisible Text) by showing fallback font immediately
- * while Kanit loads in the background
- */
-/* @fontsource handles font-face declarations via CSS imports in main.tsx */
-/* Removed duplicate @font-face rules that had stale hashed file paths */
+/* @fontsource-variable handles font-face declarations via CSS import in main.tsx */
 
 /* 
- * Fallback font metrics calibrated to match Kanit dimensions exactly
- * This prevents Cumulative Layout Shift (CLS) during font swap
- * Metrics: ascent-override, descent-override, line-gap-override, size-adjust
- * These values were calculated to match Kanit's character bounding boxes
+ * Fallback font metrics calibrated to match Plus Jakarta Sans dimensions
+ * Prevents CLS during font swap
  */
 @font-face {
-  font-family: 'Kanit Fallback';
+  font-family: 'Plus Jakarta Sans Fallback';
   src: local('Arial'), local('Helvetica Neue'), local('Helvetica'), local('sans-serif');
   font-display: swap;
-  ascent-override: 105%;
-  descent-override: 35%;
+  ascent-override: 102%;
+  descent-override: 30%;
   line-gap-override: 0%;
-  size-adjust: 97%;
+  size-adjust: 100%;
 }
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 

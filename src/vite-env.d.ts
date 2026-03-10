@@ -1,5 +1,7 @@
 /// <reference types="vite/client" />
 
+declare module '@fontsource-variable/plus-jakarta-sans';
+
 // Visual Viewport API types for mobile viewport handling
 interface VisualViewport extends EventTarget {
   readonly offsetLeft: number;

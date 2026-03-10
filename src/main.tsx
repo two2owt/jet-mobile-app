@@ -5,11 +5,8 @@ import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App.tsx";
 
-// Kanit font CSS - loaded synchronously but Vite tree-shakes unused weights
-import "@fontsource/kanit/400.css";
-import "@fontsource/kanit/500.css";
-import "@fontsource/kanit/600.css";
-import "@fontsource/kanit/900.css";
+// Plus Jakarta Sans variable font - single import covers all weights
+import "@fontsource-variable/plus-jakarta-sans";
 
 import "./index.css";
 
