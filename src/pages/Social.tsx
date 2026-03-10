@@ -162,7 +162,7 @@ export default function Social() {
         {/* Pending Requests */}
         {pendingRequests.length > 0 && (
           <div>
-            <h2 className="text-fluid-xl sm:text-fluid-2xl font-black bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent mb-fluid-md">
+            <h2 className="text-fluid-xl sm:text-fluid-2xl font-extrabold bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent mb-fluid-md">
               Friend Requests ({pendingRequests.length})
             </h2>
             <div className="space-y-fluid-sm">
@@ -213,7 +213,7 @@ export default function Social() {
 
         {/* My Friends */}
         <div>
-            <h2 className="text-fluid-xl sm:text-fluid-2xl font-black bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent mb-fluid-md">
+            <h2 className="text-fluid-xl sm:text-fluid-2xl font-extrabold bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent mb-fluid-md">
             My Friends ({connections.length})
           </h2>
           {connections.length === 0 ? (
@@ -281,7 +281,7 @@ export default function Social() {
 
         {/* Discover People */}
         <div>
-          <h2 className="text-fluid-xl sm:text-fluid-2xl font-black bg-gradient-to-r from-foreground to-accent bg-clip-text text-transparent mb-fluid-md">
+          <h2 className="text-fluid-xl sm:text-fluid-2xl font-extrabold bg-gradient-to-r from-foreground to-accent bg-clip-text text-transparent mb-fluid-md">
             Discover People
           </h2>
           <VirtualGrid

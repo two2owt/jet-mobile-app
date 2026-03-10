@@ -393,7 +393,7 @@ export const ExploreTab = ({ onVenueSelect }: ExploreTabProps) => {
     <div className="space-y-6 animate-fade-in">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-black bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent mb-2">Explore Deals</h2>
+        <h2 className="text-2xl font-extrabold bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent mb-2">Explore Deals</h2>
         <div className="flex items-center gap-2 flex-wrap">
           <p className="text-sm text-muted-foreground">
             {userLocation 

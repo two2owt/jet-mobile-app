@@ -32,7 +32,7 @@ export default function VerificationSuccess() {
         </div>
         
         <div className="space-y-2">
-          <h1 className="text-3xl font-black bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">
+          <h1 className="text-3xl font-extrabold bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">
             Email Verified!
           </h1>
           <p className="text-muted-foreground">
